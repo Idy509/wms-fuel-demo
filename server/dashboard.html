@@ -391,6 +391,7 @@ let CURRENT_VIEW = 'login';
 
 const $=id=>document.getElementById(id);
 const H=()=>({'X-User-Token':TOKEN,'Content-Type':'application/json'});
+function esc(s){if(!s)return '';const d=document.createElement('div');d.textContent=String(s);return d.innerHTML;}
 
 /* === API === */
 async function api(method, path, body) {
@@ -528,7 +529,7 @@ function renderTanks(prods) {
     const pct=Math.min(100,stk/cap*100);
     const av=Math.max(0,cap-stk);
     const label=p.name.includes('—')?p.name.split('—')[0].trim():p.name;
-    return `<div class="tank-gauge">${tankSVG(pct)}<div class="tank-label">${label}</div><div class="tank-site">${p.site||''}</div><div class="tank-val">${stk.toLocaleString()} gal</div><div class="tank-avail">${av.toLocaleString()} avail</div></div>`;
+    return `<div class="tank-gauge">${tankSVG(pct)}<div class="tank-label">${esc(label)}</div><div class="tank-site">${esc(p.site)}</div><div class="tank-val">${stk.toLocaleString()} gal</div><div class="tank-avail">${av.toLocaleString()} avail</div></div>`;
   }).join('');
 }
 
@@ -538,7 +539,7 @@ function renderBar(id,data){
   const mx=Math.max(...data.map(d=>d.total));
   el.innerHTML=data.map((d,i)=>{
     const w=mx>0?(d.total/mx*100):0;
-    return `<div class="bar-item"><span class="bar-name">${d.name}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${COLORS[i%COLORS.length]}"></div></div><span class="bar-val">${d.total.toLocaleString()} gal</span></div>`;
+    return `<div class="bar-item"><span class="bar-name">${esc(d.name)}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${COLORS[i%COLORS.length]}"></div></div><span class="bar-val">${d.total.toLocaleString()} gal</span></div>`;
   }).join('');
 }
 
@@ -562,7 +563,7 @@ function fillSelects() {
   ['rec-tank','del-tank'].forEach(id => {
     const sel = $(id);
     sel.innerHTML = '<option value="">— Select tank —</option>' +
-      PRODUCTS.map(p => `<option value="${p.id}">${p.name} (${(p.current_stock||0).toLocaleString()} / ${(p.tank_capacity||0).toLocaleString()} gal)</option>`).join('');
+      PRODUCTS.map(p => `<option value="${p.id}">${esc(p.name)} (${(p.current_stock||0).toLocaleString()} / ${(p.tank_capacity||0).toLocaleString()} gal)</option>`).join('');
   });
 }
 
@@ -656,7 +657,7 @@ async function loadHistory() {
       const info=parts.join(' · ')||'—';
       const qty=d.lines&&d.lines.length?d.lines.reduce((s,l)=>s+l.quantity,0).toLocaleString()+' gal':'';
       const dt=d.created_at?d.created_at.slice(0,10):'';
-      return `<div class="doc-row clickable" onclick="showDetail(${d.id})"><span class="doc-ref">${d.reference||'#'+d.id}</span>${badge}<span class="doc-info" title="${info}">${info}</span><span class="doc-qty">${qty}</span><span class="doc-date">${dt}</span></div>`;
+      return `<div class="doc-row clickable" onclick="showDetail(${parseInt(d.id)})"><span class="doc-ref">${esc(d.reference)||'#'+d.id}</span>${badge}<span class="doc-info" title="${esc(info)}">${esc(info)}</span><span class="doc-qty">${qty}</span><span class="doc-date">${esc(dt)}</span></div>`;
     }).join('');
     html+='</div>';
     el.innerHTML=html;
@@ -669,7 +670,7 @@ async function loadHistory() {
       $('hist-pagination').hidden=true;
     }
   } catch(e) {
-    el.innerHTML=`<span style="color:var(--red);padding:16px;">${e.message}</span>`;
+    el.innerHTML=`<span style="color:var(--red);padding:16px;">${esc(e.message)}</span>`;
   }
 }
 window.histPage=function(off){histOffset=Math.max(0,off);loadHistory();};
@@ -686,31 +687,31 @@ window.showDetail=async function(docId) {
     const doc = await api('GET', '/documents/'+docId);
     const isRec = doc.type==='RECEIVING';
     const badge = isRec?'<span class="doc-badge rec" style="font-size:11px;padding:4px 10px;">Reception</span>':'<span class="doc-badge del" style="font-size:11px;padding:4px 10px;">Distribution</span>';
-    const ref = doc.reference || '#'+doc.id;
+    const ref = esc(doc.reference) || '#'+doc.id;
     let html = `<div class="detail-header"><button class="btn btn-ghost" style="padding:6px 12px;" onclick="navigate('history')">Back</button><span class="detail-ref">${ref}</span>${badge}</div>`;
     html += '<div class="detail-grid">';
     html += field('Date', doc.created_at ? doc.created_at.replace('T',' ').slice(0,16) : '—');
-    html += field('Created by', doc.created_by || '—');
-    if(doc.party) html += field(isRec?'Supplier':'Party', doc.party);
-    if(doc.vehicle_plate) html += field('Vehicle Plate', doc.vehicle_plate);
-    if(doc.project) html += field('Project', doc.project);
-    if(doc.receiver) html += field('Receiver', doc.receiver);
-    if(doc.carrier) html += field('Carrier', doc.carrier);
-    if(doc.mileage) html += field('Mileage', doc.mileage + ' km');
-    if(doc.fuel_card) html += field('Fuel Card', doc.fuel_card);
-    if(doc.note) html += field('Note', doc.note);
+    html += field('Created by', esc(doc.created_by) || '—');
+    if(doc.party) html += field(isRec?'Supplier':'Party', esc(doc.party));
+    if(doc.vehicle_plate) html += field('Vehicle Plate', esc(doc.vehicle_plate));
+    if(doc.project) html += field('Project', esc(doc.project));
+    if(doc.receiver) html += field('Receiver', esc(doc.receiver));
+    if(doc.carrier) html += field('Carrier', esc(doc.carrier));
+    if(doc.mileage) html += field('Mileage', esc(doc.mileage) + ' km');
+    if(doc.fuel_card) html += field('Fuel Card', esc(doc.fuel_card));
+    if(doc.note) html += field('Note', esc(doc.note));
     html += '</div>';
     if(doc.lines && doc.lines.length) {
       html += '<div class="detail-lines"><div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--t3);margin-bottom:8px;">Lines</div>';
       doc.lines.forEach(l => {
-        const pname = l.name || l.product_name || l.sku || l.product_sku || ('Product #'+l.product_id);
+        const pname = esc(l.name || l.product_name || l.sku || l.product_sku) || ('Product #'+l.product_id);
         html += `<div class="detail-line"><span>${pname}</span><span style="font-family:var(--mono);font-weight:600;">${l.quantity.toLocaleString()} gal</span></div>`;
       });
       html += '</div>';
     }
     el.innerHTML = html;
   } catch(e) {
-    el.innerHTML=`<span style="color:var(--red);padding:16px;">${e.message}</span>`;
+    el.innerHTML=`<span style="color:var(--red);padding:16px;">${esc(e.message)}</span>`;
   }
 };
 function field(label,val){return `<div class="detail-field"><div class="detail-field-label">${label}</div><div class="detail-field-val">${val}</div></div>`;}
