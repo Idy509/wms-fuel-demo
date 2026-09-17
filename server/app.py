@@ -687,67 +687,34 @@ def health():
     return {"status": "ok"}
 
 
-@app.get("/demo/debug")
-def demo_debug():
-    """Diagnostic endpoint — filesystem and DB checks, no auth."""
-    import pathlib as _pathlib
-    from database import DB_PATH as _db_path
-    info = {
-        "cwd": os.getcwd(),
-        "db_path_raw": os.environ.get("WMS_DB_PATH", "(not set)"),
-        "db_path_resolved": str(_db_path),
-        "db_path_absolute": str(_db_path.resolve()) if hasattr(_db_path, 'resolve') else str(_db_path),
-        "db_exists": _db_path.exists() if hasattr(_db_path, 'exists') else "N/A",
-        "demo_mode": os.environ.get("WMS_DEMO_MODE", "(not set)"),
-    }
-    try:
-        parent = _db_path.parent
-        info["parent_exists"] = parent.exists()
-        info["parent_contents"] = os.listdir(str(parent)) if parent.exists() else []
-    except Exception as e:
-        info["parent_error"] = str(e)
-    try:
-        import sqlite3 as _sql
-        c = _sql.connect(str(_db_path))
-        tables = [r[0] for r in c.execute("SELECT name FROM sqlite_master WHERE type='table'").fetchall()]
-        info["tables"] = tables
-        if "products" in tables:
-            info["product_count"] = c.execute("SELECT count(*) FROM products").fetchone()[0]
-        if "users" in tables:
-            info["user_count"] = c.execute("SELECT count(*) FROM users").fetchone()[0]
-        c.close()
-    except Exception as e:
-        info["db_error"] = str(e)
-    return info
-
-
 @app.get("/demo/summary")
 def demo_summary():
     """Public endpoint for the web dashboard — no auth required."""
     if os.environ.get("WMS_DEMO_MODE") != "1":
         raise HTTPException(status_code=404, detail="Not Found")
-    try:
-        with get_conn() as conn:
-            products = [dict(r) for r in conn.execute(
-                "SELECT id, sku, name, tank_capacity, current_stock FROM products"
-            ).fetchall()]
-            doc_count = conn.execute("SELECT count(*) FROM documents").fetchone()[0]
-            docs = [dict(r) for r in conn.execute(
-                "SELECT reference, type, created_at FROM documents "
-                "ORDER BY created_at DESC LIMIT 8"
-            ).fetchall()]
-        return {
-            "products": products,
-            "total_documents": doc_count,
-            "recent_documents": docs,
-        }
-    except Exception as exc:
-        import traceback
-        return JSONResponse(status_code=500, content={
-            "detail": str(exc),
-            "traceback": traceback.format_exc(),
-            "cwd": os.getcwd(),
-        })
+    with get_conn() as conn:
+        products = [dict(r) for r in conn.execute(
+            "SELECT id, sku, name, tank_capacity, current_stock, site "
+            "FROM products"
+        ).fetchall()]
+        doc_count = conn.execute("SELECT count(*) FROM documents").fetchone()[0]
+        rec_count = conn.execute(
+            "SELECT count(*) FROM documents WHERE type='RECEIVING'"
+        ).fetchone()[0]
+        del_count = conn.execute(
+            "SELECT count(*) FROM documents WHERE type='DELIVERY'"
+        ).fetchone()[0]
+        docs = [dict(r) for r in conn.execute(
+            "SELECT reference, type, party, created_at FROM documents "
+            "ORDER BY created_at DESC LIMIT 10"
+        ).fetchall()]
+    return {
+        "products": products,
+        "total_documents": doc_count,
+        "receptions": rec_count,
+        "deliveries": del_count,
+        "recent_documents": docs,
+    }
 
 
 @app.get("/backup/statut")

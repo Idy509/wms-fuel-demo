@@ -5,417 +5,331 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>WMS Fuel Management — Live Demo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0f1117;
-  --surface: #1a1d27;
-  --surface-2: #232736;
-  --border: #2e3348;
-  --text: #e8eaf0;
-  --text-muted: #8b90a5;
-  --accent: #3b82f6;
-  --accent-soft: rgba(59,130,246,0.12);
-  --green: #22c55e;
-  --green-soft: rgba(34,197,94,0.12);
-  --orange: #f59e0b;
-  --orange-soft: rgba(245,158,11,0.12);
-  --red: #ef4444;
-  --red-soft: rgba(239,68,68,0.12);
-  --font: 'Inter', system-ui, sans-serif;
-  --mono: 'JetBrains Mono', monospace;
+  --bg: #0b0e14;
+  --surface: #141820;
+  --surface-2: #1b2130;
+  --surface-3: #222940;
+  --border: #2a3148;
+  --text: #e4e8f1;
+  --text-2: #a0a8c0;
+  --text-3: #6b7394;
+  --accent: #4f8efa;
+  --accent-2: #3a6fd8;
+  --accent-soft: rgba(79,142,250,0.10);
+  --green: #34d399;
+  --green-soft: rgba(52,211,153,0.10);
+  --amber: #fbbf24;
+  --amber-soft: rgba(251,191,36,0.10);
+  --red: #f87171;
+  --red-soft: rgba(248,113,113,0.10);
+  --font: 'Inter', system-ui, -apple-system, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+  --radius: 10px;
 }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--font);
-  line-height: 1.5;
-  min-height: 100vh;
-}
-.header {
-  background: var(--surface);
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.55; min-height: 100vh; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(11,14,20,0.85); backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  padding: 1.25rem 2rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
+  padding: 0 2rem; height: 56px;
+  display: flex; align-items: center; justify-content: space-between;
 }
-.header-left { display: flex; align-items: center; gap: 0.75rem; }
-.logo {
-  width: 40px; height: 40px;
-  background: var(--accent);
-  border-radius: 10px;
+.nav-brand { display: flex; align-items: center; gap: 10px; }
+.nav-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: linear-gradient(135deg, var(--accent), #6c5ce7);
   display: flex; align-items: center; justify-content: center;
-  font-size: 1.25rem; font-weight: 700; color: #fff;
+  font-weight: 800; font-size: 14px; color: #fff;
 }
-.header h1 { font-size: 1.1rem; font-weight: 600; }
-.header h1 span { color: var(--accent); }
-.badge {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 0.2rem 0.5rem;
-  border-radius: 4px;
-  background: var(--green-soft);
-  color: var(--green);
+.nav-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
+.nav-title span { color: var(--accent); }
+.nav-status {
+  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+  display: flex; align-items: center; gap: 6px; color: var(--green);
 }
-.badge.offline { background: var(--red-soft); color: var(--red); }
-.main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.nav-status .dot {
+  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
+  animation: pulse 2s ease-in-out infinite;
+}
+.nav-status.offline { color: var(--red); }
+.nav-status.offline .dot { background: var(--red); animation: none; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
 
-.hero {
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-.hero h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-.hero p {
-  color: var(--text-muted);
-  max-width: 600px;
-  margin: 0 auto;
-}
+/* ── LAYOUT ── */
+.page { max-width: 1180px; margin: 0 auto; padding: 28px 24px 60px; }
+@media (max-width: 768px) { .page { padding: 20px 16px 48px; } .nav { padding: 0 16px; } }
 
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-.stat-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.25rem;
-}
-.stat-card .label {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-.stat-card .value {
-  font-size: 1.75rem;
-  font-weight: 700;
-  font-family: var(--mono);
-}
-.stat-card .sub {
-  font-size: 0.8rem;
-  color: var(--text-muted);
-  margin-top: 0.25rem;
-}
+/* ── HERO ── */
+.hero { margin-bottom: 32px; }
+.hero h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
+.hero p { color: var(--text-2); margin-top: 6px; font-size: 14px; max-width: 560px; }
 
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+/* ── KPI ROW ── */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
+@media (max-width: 640px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+.kpi {
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 16px 18px; position: relative; overflow: hidden;
 }
-@media (max-width: 768px) {
-  .grid-2 { grid-template-columns: 1fr; }
-  .main { padding: 1rem; }
-  .header { padding: 1rem; }
+.kpi::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
 }
+.kpi.blue::before  { background: var(--accent); }
+.kpi.green::before { background: var(--green); }
+.kpi.amber::before { background: var(--amber); }
+.kpi.red::before   { background: var(--red); }
+.kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
+.kpi-value { font-family: var(--mono); font-size: 28px; font-weight: 700; margin-top: 4px; letter-spacing: -0.02em; }
+.kpi-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
 
+/* ── GRID ── */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+
+/* ── CARD ── */
 .card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  padding: 1.5rem;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 20px;
 }
-.card h3 {
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.card-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
 }
-.card h3 .icon {
-  width: 28px; height: 28px;
-  background: var(--accent-soft);
-  border-radius: 6px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.85rem;
+.card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-2); }
+.card-badge {
+  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+  background: var(--accent-soft); color: var(--accent);
 }
 
-.tank {
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--border);
-}
-.tank:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.tank-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-.tank-name { font-weight: 500; font-size: 0.85rem; }
-.tank-pct {
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  font-weight: 600;
-}
-.tank-bar {
-  height: 8px;
-  background: var(--surface-2);
-  border-radius: 4px;
-  overflow: hidden;
-}
-.tank-bar-fill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 0.8s ease;
-}
-.tank-details {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 0.35rem;
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  font-family: var(--mono);
+/* ── TANKS ── */
+.tank { margin-bottom: 16px; }
+.tank:last-child { margin-bottom: 0; }
+.tank-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
+.tank-name { font-size: 13px; font-weight: 500; }
+.tank-site { font-size: 11px; color: var(--text-3); margin-left: 6px; }
+.tank-pct { font-family: var(--mono); font-size: 13px; font-weight: 600; }
+.tank-track { height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
+.tank-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
+.tank-meta {
+  display: flex; justify-content: space-between; margin-top: 4px;
+  font-size: 11px; color: var(--text-3); font-family: var(--mono);
 }
 
+/* ── DOCS TABLE ── */
+.doc-table { width: 100%; }
 .doc-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.6rem 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.85rem;
+  display: grid; grid-template-columns: 100px 1fr 90px 90px;
+  align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px; gap: 8px;
 }
 .doc-row:last-child { border-bottom: none; }
-.doc-ref { font-family: var(--mono); font-weight: 500; }
-.doc-type {
-  font-size: 0.7rem;
-  padding: 0.15rem 0.4rem;
-  border-radius: 4px;
-  font-weight: 600;
+.doc-ref { font-family: var(--mono); font-weight: 500; font-size: 12px; }
+.doc-party { color: var(--text-2); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-badge {
+  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
+  padding: 2px 6px; border-radius: 3px; text-align: center; width: fit-content;
 }
-.doc-type.rec { background: var(--green-soft); color: var(--green); }
-.doc-type.dist { background: var(--accent-soft); color: var(--accent); }
-.doc-type.gauge { background: var(--orange-soft); color: var(--orange); }
-.doc-date { color: var(--text-muted); font-size: 0.8rem; }
+.doc-badge.rec { background: var(--green-soft); color: var(--green); }
+.doc-badge.del { background: var(--accent-soft); color: var(--accent); }
+.doc-date { font-size: 12px; color: var(--text-3); text-align: right; font-family: var(--mono); }
+@media (max-width: 640px) {
+  .doc-row { grid-template-columns: 80px 1fr 70px; }
+  .doc-date { display: none; }
+}
 
-.endpoint-list { list-style: none; }
-.endpoint-list li {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.82rem;
+/* ── API ── */
+.api-list { display: grid; gap: 6px; }
+.api-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 6px 0; font-size: 13px;
 }
-.endpoint-list li:last-child { border-bottom: none; }
-.method {
-  font-family: var(--mono);
-  font-size: 0.65rem;
-  font-weight: 700;
-  padding: 0.15rem 0.35rem;
-  border-radius: 3px;
-  min-width: 36px;
-  text-align: center;
+.api-method {
+  font-family: var(--mono); font-size: 10px; font-weight: 700;
+  padding: 2px 6px; border-radius: 3px; min-width: 36px; text-align: center;
 }
-.method.get { background: var(--green-soft); color: var(--green); }
-.method.post { background: var(--accent-soft); color: var(--accent); }
-.ep-path { font-family: var(--mono); color: var(--text-muted); }
+.api-method.get { background: var(--green-soft); color: var(--green); }
+.api-method.post { background: var(--accent-soft); color: var(--accent); }
+.api-path { font-family: var(--mono); color: var(--text-3); font-size: 12px; }
+.api-desc { color: var(--text-2); font-size: 12px; }
 
+/* ── FOOTER ── */
 .footer {
-  text-align: center;
-  padding: 2rem;
-  color: var(--text-muted);
-  font-size: 0.8rem;
+  text-align: center; padding-top: 32px; margin-top: 12px;
   border-top: 1px solid var(--border);
-  margin-top: 2rem;
+  font-size: 12px; color: var(--text-3);
 }
 .footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+.footer .tech { margin-top: 4px; font-size: 11px; }
 
-.loading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem;
-  color: var(--text-muted);
-}
-.spinner {
-  width: 20px; height: 20px;
-  border: 2px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin-right: 0.5rem;
-}
+/* ── LOADING ── */
+.loading { display: flex; align-items: center; justify-content: center; padding: 32px; color: var(--text-3); font-size: 13px; }
+.spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 8px; }
 @keyframes spin { to { transform: rotate(360deg); } }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <div class="header-left">
-    <div class="logo">F</div>
-    <h1>WMS <span>Fuel</span> Management</h1>
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-icon">F</div>
+    <div class="nav-title">WMS <span>Fuel</span></div>
   </div>
-  <div id="status-badge" class="badge">Connecting...</div>
-</div>
+  <div id="status" class="nav-status"><div class="dot"></div> Connecting</div>
+</nav>
 
-<div class="main">
+<div class="page">
   <div class="hero">
-    <h2>Fuel Inventory Control System</h2>
-    <p>Real-time tank monitoring, reception tracking, distribution management and gauging operations for multi-site fuel depots.</p>
+    <h1>Fuel Inventory Control</h1>
+    <p>Multi-site tank monitoring, reception tracking, distribution management and gauging operations for fuel depots.</p>
   </div>
 
-  <div class="stats-row" id="stats-row">
-    <div class="stat-card">
-      <div class="label">Total Stock</div>
-      <div class="value" id="total-stock">—</div>
-      <div class="sub">gallons across all tanks</div>
+  <div class="kpi-row">
+    <div class="kpi blue">
+      <div class="kpi-label">Total Stock</div>
+      <div class="kpi-value" id="k-stock">—</div>
+      <div class="kpi-sub">gallons across all tanks</div>
     </div>
-    <div class="stat-card">
-      <div class="label">Active Tanks</div>
-      <div class="value" id="active-tanks">—</div>
-      <div class="sub">monitored in real time</div>
+    <div class="kpi green">
+      <div class="kpi-label">Receptions</div>
+      <div class="kpi-value" id="k-rec">—</div>
+      <div class="kpi-sub">fuel intake operations</div>
     </div>
-    <div class="stat-card">
-      <div class="label">Documents</div>
-      <div class="value" id="total-docs">—</div>
-      <div class="sub">receptions &amp; distributions</div>
+    <div class="kpi amber">
+      <div class="kpi-label">Distributions</div>
+      <div class="kpi-value" id="k-del">—</div>
+      <div class="kpi-sub">fuel dispatched</div>
     </div>
-    <div class="stat-card">
-      <div class="label">API Status</div>
-      <div class="value" id="api-status" style="color:var(--green)">—</div>
-      <div class="sub">health check</div>
+    <div class="kpi red">
+      <div class="kpi-label">Active Tanks</div>
+      <div class="kpi-value" id="k-tanks">—</div>
+      <div class="kpi-sub">monitored sites</div>
     </div>
   </div>
 
-  <div class="grid-2">
+  <div class="grid">
     <div class="card">
-      <h3><span class="icon">⛽</span> Tank Levels</h3>
-      <div id="tanks-container">
-        <div class="loading"><div class="spinner"></div> Loading tanks...</div>
+      <div class="card-header">
+        <span class="card-title">Tank Levels</span>
+        <span class="card-badge" id="tank-count">—</span>
       </div>
+      <div id="tanks"><div class="loading"><div class="spinner"></div>Loading…</div></div>
     </div>
-
     <div class="card">
-      <h3><span class="icon">📋</span> Recent Operations</h3>
-      <div id="docs-container">
-        <div class="loading"><div class="spinner"></div> Loading documents...</div>
+      <div class="card-header">
+        <span class="card-title">Recent Operations</span>
+        <span class="card-badge" id="doc-total">—</span>
       </div>
+      <div id="docs"><div class="loading"><div class="spinner"></div>Loading…</div></div>
     </div>
   </div>
 
   <div class="card">
-    <h3><span class="icon">🔌</span> API Endpoints</h3>
-    <ul class="endpoint-list">
-      <li><span class="method get">GET</span><span class="ep-path">/health</span> System health check</li>
-      <li><span class="method post">POST</span><span class="ep-path">/login</span> Authentication with session token</li>
-      <li><span class="method get">GET</span><span class="ep-path">/products</span> Product &amp; tank inventory</li>
-      <li><span class="method get">GET</span><span class="ep-path">/documents</span> Operation history (paginated)</li>
-      <li><span class="method post">POST</span><span class="ep-path">/documents</span> Create reception / distribution / gauging</li>
-      <li><span class="method get">GET</span><span class="ep-path">/reference/fuel</span> Project reference data</li>
-      <li><span class="method get">GET</span><span class="ep-path">/dashboard</span> Live dashboard with KPIs</li>
-      <li><span class="method get">GET</span><span class="ep-path">/fuel/niveau-cuve/{id}</span> Tank level history (30/90/365 days)</li>
-    </ul>
+    <div class="card-header">
+      <span class="card-title">REST API Endpoints</span>
+      <span class="card-badge">FastAPI</span>
+    </div>
+    <div class="api-list">
+      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/health</span><span class="api-desc">System health check</span></div>
+      <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/login</span><span class="api-desc">Authenticate &amp; get session token</span></div>
+      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/products</span><span class="api-desc">Product &amp; tank inventory</span></div>
+      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/documents</span><span class="api-desc">Operation history (paginated)</span></div>
+      <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/documents</span><span class="api-desc">Create reception / distribution / gauging</span></div>
+      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/dashboard</span><span class="api-desc">Live KPIs &amp; analytics</span></div>
+      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/fuel/niveau-cuve/{id}</span><span class="api-desc">Tank level history (30/90/365 days)</span></div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Built by <a href="https://www.linkedin.com/in/idens-meranvil" target="_blank">Idens Meranvil</a>
+    <div class="tech">Python · FastAPI · SQLite · Deployed on Render</div>
   </div>
 </div>
 
-<div class="footer">
-  Built by <a href="https://www.linkedin.com/in/idens-meranvil" target="_blank">Idens Meranvil</a>
-  &middot; FastAPI + SQLite &middot; Deployed on Render
-</div>
-
 <script>
-function pctColor(pct) {
-  if (pct > 90) return 'var(--red)';
-  if (pct > 75) return 'var(--orange)';
+const $ = id => document.getElementById(id);
+
+function tankColor(pct) {
+  if (pct > 85) return 'var(--red)';
+  if (pct > 70) return 'var(--amber)';
   return 'var(--accent)';
 }
 
 function renderTanks(products) {
-  const c = document.getElementById('tanks-container');
-  if (!products || !products.length) { c.innerHTML = '<p style="color:var(--text-muted)">No tanks configured</p>'; return; }
-  c.innerHTML = products.map(p => {
+  const el = $('tanks');
+  if (!products.length) { el.innerHTML = '<p style="color:var(--text-3)">No tanks</p>'; return; }
+  $('tank-count').textContent = products.length + ' tanks';
+  el.innerHTML = products.map(p => {
     const cap = p.tank_capacity || 1;
-    const stock = p.current_stock || 0;
-    const pct = Math.min(100, (stock / cap * 100));
-    const avail = Math.max(0, cap - stock);
+    const stk = p.current_stock || 0;
+    const pct = Math.min(100, stk / cap * 100);
+    const avail = Math.max(0, cap - stk);
+    const color = tankColor(pct);
+    const site = p.site ? `<span class="tank-site">${p.site}</span>` : '';
     return `<div class="tank">
-      <div class="tank-header">
-        <span class="tank-name">${p.name}</span>
-        <span class="tank-pct" style="color:${pctColor(pct)}">${pct.toFixed(1)}%</span>
+      <div class="tank-top">
+        <span><span class="tank-name">${p.name.split(' — ')[0]}</span>${site}</span>
+        <span class="tank-pct" style="color:${color}">${pct.toFixed(1)}%</span>
       </div>
-      <div class="tank-bar">
-        <div class="tank-bar-fill" style="width:${pct}%;background:${pctColor(pct)}"></div>
-      </div>
-      <div class="tank-details">
-        <span>${stock.toLocaleString()} gal</span>
-        <span>${avail.toLocaleString()} gal available</span>
-      </div>
+      <div class="tank-track"><div class="tank-fill" style="width:${pct}%;background:${color}"></div></div>
+      <div class="tank-meta"><span>${stk.toLocaleString()} gal</span><span>${avail.toLocaleString()} gal avail</span></div>
     </div>`;
   }).join('');
 }
 
-function docTypeLabel(t) {
-  if (t === 'RECEIVING') return ['Reception', 'rec'];
-  if (t === 'DELIVERY') return ['Distribution', 'dist'];
-  if (t === 'GAUGING') return ['Gauging', 'gauge'];
-  return [t, ''];
-}
-
-function renderDocs(docs) {
-  const c = document.getElementById('docs-container');
-  if (!docs || !docs.length) { c.innerHTML = '<p style="color:var(--text-muted)">No operations yet</p>'; return; }
-  c.innerHTML = docs.map(d => {
-    const [label, cls] = docTypeLabel(d.type);
+function renderDocs(docs, total) {
+  const el = $('docs');
+  $('doc-total').textContent = total + ' total';
+  if (!docs.length) { el.innerHTML = '<p style="color:var(--text-3)">No operations</p>'; return; }
+  el.innerHTML = '<div class="doc-table">' + docs.map(d => {
+    const isRec = d.type === 'RECEIVING';
+    const badge = isRec ? '<span class="doc-badge rec">REC</span>' : '<span class="doc-badge del">DEL</span>';
     const dt = d.created_at ? d.created_at.slice(0, 10) : '';
+    const party = d.party || (isRec ? 'Fuel intake' : '—');
     return `<div class="doc-row">
       <span class="doc-ref">${d.reference || '—'}</span>
-      <span class="doc-type ${cls}">${label}</span>
+      <span class="doc-party">${party}</span>
+      ${badge}
       <span class="doc-date">${dt}</span>
     </div>`;
-  }).join('');
+  }).join('') + '</div>';
 }
 
 async function init() {
-  const badge = document.getElementById('status-badge');
+  const st = $('status');
   try {
     const h = await fetch('/health');
-    const hd = await h.json();
-    document.getElementById('api-status').textContent = hd.status === 'ok' ? 'Online' : 'Error';
-    badge.textContent = 'Live';
-    badge.className = 'badge';
+    if (!h.ok) throw 0;
+    st.innerHTML = '<div class="dot"></div> Live';
+    st.className = 'nav-status';
   } catch {
-    document.getElementById('api-status').textContent = 'Offline';
-    document.getElementById('api-status').style.color = 'var(--red)';
-    badge.textContent = 'Offline';
-    badge.className = 'badge offline';
+    st.innerHTML = '<div class="dot"></div> Offline';
+    st.className = 'nav-status offline';
     return;
   }
-
   try {
     const r = await fetch('/demo/summary');
-    if (!r.ok) throw new Error('summary unavailable');
-    const data = await r.json();
-
-    const products = data.products || [];
-    const totalStock = products.reduce((s, p) => s + (p.current_stock || 0), 0);
-    document.getElementById('total-stock').textContent = totalStock.toLocaleString();
-    document.getElementById('active-tanks').textContent = products.length;
-    document.getElementById('total-docs').textContent = data.total_documents || 0;
+    if (!r.ok) throw 0;
+    const d = await r.json();
+    const products = d.products || [];
+    const totalStock = products.reduce((s,p) => s + (p.current_stock||0), 0);
+    $('k-stock').textContent = totalStock.toLocaleString();
+    $('k-rec').textContent = d.receptions || 0;
+    $('k-del').textContent = d.deliveries || 0;
+    $('k-tanks').textContent = products.length;
     renderTanks(products);
-    renderDocs(data.recent_documents || []);
+    renderDocs(d.recent_documents || [], d.total_documents || 0);
   } catch {
-    document.getElementById('tanks-container').innerHTML = '<p style="color:var(--text-muted)">Data unavailable</p>';
-    document.getElementById('docs-container').innerHTML = '<p style="color:var(--text-muted)">Data unavailable</p>';
+    $('tanks').innerHTML = '<p style="color:var(--text-3)">Data unavailable</p>';
+    $('docs').innerHTML = '<p style="color:var(--text-3)">Data unavailable</p>';
   }
 }
-
 init();
 </script>
 </body>
