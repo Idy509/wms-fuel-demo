@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -40,6 +40,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .section-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--bdr);}
 .section-title{font-size:13px;font-weight:700;display:flex;align-items:center;gap:8px;}
 .badge{font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;background:rgba(59,130,246,.1);color:var(--blue);}
+.badge-warn{background:rgba(239,68,68,.1);color:var(--red);}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
 @media(max-width:768px){.grid-2{grid-template-columns:1fr;}}
 .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
@@ -71,12 +72,13 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 
 /* TANKS */
 .tanks-row{display:flex;flex-wrap:wrap;gap:16px;justify-content:center;}
-.tank-gauge{text-align:center;width:110px;}
+.tank-gauge{text-align:center;width:120px;}
 .tank-gauge svg{display:block;margin:0 auto;}
 .tank-label{font-size:11px;font-weight:600;margin-top:6px;}
 .tank-site{font-size:10px;color:var(--t3);}
 .tank-val{font-family:var(--mono);font-size:11px;font-weight:600;margin-top:2px;}
 .tank-avail{font-size:10px;color:var(--t3);}
+.tank-warn{font-size:9px;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.04em;margin-top:2px;}
 
 /* BAR CHART */
 .bar-chart{display:flex;flex-direction:column;gap:8px;}
@@ -88,7 +90,7 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 
 /* DOC TABLE */
 .doc-table{width:100%;overflow-x:auto;}
-.doc-row{display:grid;grid-template-columns:120px 80px 1fr 80px 90px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:12px;gap:8px;}
+.doc-row{display:grid;grid-template-columns:120px 90px 1fr 80px 90px;align-items:center;padding:10px 0;border-bottom:1px solid var(--bdr);font-size:12px;gap:8px;}
 .doc-row.header{font-weight:600;color:var(--t3);font-size:11px;text-transform:uppercase;letter-spacing:.04em;border-bottom:2px solid var(--bdr);}
 .doc-row:last-child{border-bottom:none;}
 .doc-ref{font-family:var(--mono);font-weight:600;font-size:11px;color:var(--blue);}
@@ -98,10 +100,10 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .doc-badge.del{background:rgba(59,130,246,.12);color:var(--blue);}
 .doc-qty{font-family:var(--mono);font-size:11px;text-align:right;color:var(--t2);}
 .doc-date{font-family:var(--mono);font-size:11px;color:var(--t3);text-align:right;}
-@media(max-width:640px){.doc-row{grid-template-columns:100px 60px 1fr 60px;}.doc-date{display:none;}}
+@media(max-width:640px){.doc-row{grid-template-columns:100px 70px 1fr 60px;}.doc-date{display:none;}}
 
 /* FORM */
-.form-card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:24px;max-width:680px;margin:0 auto;}
+.form-card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:24px;max-width:700px;margin:0 auto;}
 .form-card h2{font-size:18px;font-weight:700;margin-bottom:4px;}
 .form-card .form-sub{color:var(--t2);font-size:13px;margin-bottom:20px;}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
@@ -110,20 +112,33 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 .form-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
 .success-msg{background:rgba(34,197,94,.12);color:var(--green);padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none;}
 .error-msg{background:rgba(239,68,68,.12);color:var(--red);padding:12px 16px;border-radius:8px;font-size:13px;margin-bottom:16px;display:none;}
-.ref-preview{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--blue);background:var(--card2);padding:10px 14px;border-radius:8px;border:1px dashed var(--bdr);display:flex;align-items:center;gap:8px;}
+.ref-preview{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--blue);background:var(--card2);padding:10px 14px;border-radius:8px;border:1px dashed var(--bdr);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
 .ref-icon{font-size:14px;}
 .form-divider{border:0;border-top:1px solid var(--bdr);margin:20px 0 16px;}
+.field-required{color:var(--red);}
 
 /* DETAIL VIEW */
-.detail-card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:24px;max-width:680px;margin:0 auto;}
+.detail-card{background:var(--card);border:1px solid var(--bdr);border-radius:10px;padding:24px;max-width:700px;margin:0 auto;}
 .detail-header{display:flex;align-items:center;gap:12px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--bdr);}
-.detail-ref{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--blue);}
+.detail-ref{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--blue);flex:1;}
 .detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
 @media(max-width:640px){.detail-grid{grid-template-columns:1fr;}}
 .detail-field{}.detail-field-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--t3);margin-bottom:4px;}
 .detail-field-val{font-size:14px;font-weight:500;}
 .detail-lines{margin-top:16px;padding-top:16px;border-top:1px solid var(--bdr);}
 .detail-line{display:flex;justify-content:space-between;padding:8px 12px;background:var(--card2);border-radius:6px;margin-bottom:6px;font-size:13px;}
+.detail-total{display:flex;justify-content:space-between;padding:10px 12px;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:6px;font-size:14px;font-weight:700;margin-top:4px;}
+
+/* ACTIVITY */
+.activity-list{display:flex;flex-direction:column;gap:6px;}
+.activity-item{display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:6px;font-size:12px;transition:background .15s;cursor:pointer;}
+.activity-item:hover{background:var(--card2);}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.activity-dot.rec{background:var(--green);}
+.activity-dot.del{background:var(--blue);}
+.activity-time{font-family:var(--mono);font-size:10px;color:var(--t3);flex-shrink:0;width:45px;text-align:right;}
+.activity-ref{font-family:var(--mono);font-weight:600;color:var(--blue);font-size:11px;flex-shrink:0;}
+.activity-info{color:var(--t2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;}
 
 /* PAGINATION */
 .pagination{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;}
@@ -140,6 +155,18 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 
 .clickable{cursor:pointer;transition:background .15s;}.clickable:hover{background:var(--card2);}
 
+/* PRINT */
+@media print{
+  body{background:#fff;color:#000;}
+  .nav,.footer,.btn-ghost,.no-print{display:none!important;}
+  .detail-card{border:none;max-width:100%;padding:0;}
+  .detail-field-label{color:#666;}
+  .detail-line{background:#f5f5f5;}
+  .detail-total{background:#e8f0fe;border-color:#c4d7f5;}
+  .doc-badge.rec{background:#e8f5e9;color:#2e7d32;}
+  .doc-badge.del{background:#e3f2fd;color:#1565c0;}
+}
+
 [hidden]{display:none!important;}
 </style>
 </head>
@@ -152,14 +179,14 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     <h1>Fuel <span>Monitor</span></h1>
   </div>
   <div class="nav-links" id="nav-links">
-    <button class="nav-link active" data-view="dashboard">Dashboard</button>
-    <button class="nav-link" data-view="receive">Reception</button>
+    <button class="nav-link active" data-view="dashboard">Tableau de bord</button>
+    <button class="nav-link" data-view="receive">Réception</button>
     <button class="nav-link" data-view="deliver">Distribution</button>
-    <button class="nav-link" data-view="history">History</button>
+    <button class="nav-link" data-view="history">Historique</button>
   </div>
   <div class="nav-right">
     <span class="nav-user" id="nav-user"></span>
-    <button class="btn-logout" id="btn-logout">Logout</button>
+    <button class="btn-logout" id="btn-logout">Déconnexion</button>
   </div>
 </nav>
 
@@ -173,20 +200,20 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
   </nav>
   <div class="login-wrap">
     <div class="login-box">
-      <h2>Sign In</h2>
+      <h2>Connexion</h2>
       <div class="sub">Fuel Monitoring System — Demo</div>
       <div class="login-error" id="login-error"></div>
       <div class="form-group">
-        <label>Username</label>
+        <label>Identifiant</label>
         <input type="text" id="login-user" value="DemoFuel" autocomplete="username">
       </div>
       <div class="form-group">
-        <label>Password</label>
+        <label>Mot de passe</label>
         <input type="password" id="login-pass" value="Reservoir2026Public" autocomplete="current-password">
       </div>
-      <button class="btn btn-primary" style="width:100%;margin-top:8px" id="btn-login">Sign In</button>
+      <button class="btn btn-primary" style="width:100%;margin-top:8px" id="btn-login">Se connecter</button>
       <div class="login-hint">
-        Demo credentials pre-filled.<br>
+        Identifiants de démo pré-remplis.<br>
         <code>DemoFuel</code> / <code>Reservoir2026Public</code>
       </div>
     </div>
@@ -197,57 +224,69 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 <div id="view-dashboard" class="page" hidden>
   <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px;">
     <div>
-      <h2 style="font-size:22px;font-weight:800;">Fuel Dashboard</h2>
-      <p style="color:var(--t2);font-size:13px;margin-top:4px;">Real-time tank monitoring and operations overview</p>
+      <h2 style="font-size:22px;font-weight:800;">Tableau de bord</h2>
+      <p style="color:var(--t2);font-size:13px;margin-top:4px;">Suivi en temps réel des cuves et des opérations</p>
     </div>
-    <span class="badge" id="dash-status">Loading...</span>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span class="badge" id="dash-status">Chargement...</span>
+      <span style="font-size:10px;color:var(--t3);" id="dash-time"></span>
+    </div>
   </div>
   <div class="kpi-grid" id="dash-kpis">
-    <div class="kpi b"><div class="kpi-label">Total Stock</div><div class="kpi-val" id="k-stock">—</div><div class="kpi-sub">gallons</div></div>
-    <div class="kpi g"><div class="kpi-label">Receptions</div><div class="kpi-val" id="k-rec">—</div><div class="kpi-sub">fuel intake ops</div></div>
-    <div class="kpi a"><div class="kpi-label">Distributions</div><div class="kpi-val" id="k-del">—</div><div class="kpi-sub">dispatched</div></div>
-    <div class="kpi r"><div class="kpi-label">Active Tanks</div><div class="kpi-val" id="k-tanks">—</div><div class="kpi-sub">sites</div></div>
+    <div class="kpi b"><div class="kpi-label">Stock total</div><div class="kpi-val" id="k-stock">—</div><div class="kpi-sub">gallons en cuve</div></div>
+    <div class="kpi g"><div class="kpi-label">Réceptions</div><div class="kpi-val" id="k-rec">—</div><div class="kpi-sub">entrées carburant</div></div>
+    <div class="kpi a"><div class="kpi-label">Distributions</div><div class="kpi-val" id="k-del">—</div><div class="kpi-sub">sorties carburant</div></div>
+    <div class="kpi r"><div class="kpi-label">Cuves actives</div><div class="kpi-val" id="k-tanks">—</div><div class="kpi-sub">sites surveillés</div></div>
   </div>
   <div class="section">
-    <div class="section-head"><span class="section-title">Tank Levels</span><span class="badge" id="tank-badge">—</span></div>
-    <div id="dash-tanks" class="tanks-row"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+    <div class="section-head">
+      <span class="section-title">Niveau des cuves</span>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="badge" id="tank-badge">—</span>
+        <span class="badge badge-warn" id="tank-warn-badge" hidden></span>
+      </div>
+    </div>
+    <div id="dash-tanks" class="tanks-row"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
+  </div>
+  <div class="section">
+    <div class="section-head"><span class="section-title">Activité récente</span><span class="badge" id="activity-badge">—</span></div>
+    <div id="dash-activity" class="activity-list"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
   </div>
   <div class="grid-2">
-    <div class="section"><div class="section-head"><span class="section-title">By Receiver</span></div><div id="ch-recv" class="bar-chart"></div></div>
-    <div class="section"><div class="section-head"><span class="section-title">By Project</span></div><div id="ch-proj" class="bar-chart"></div></div>
+    <div class="section"><div class="section-head"><span class="section-title">Par fournisseur</span></div><div id="ch-recv" class="bar-chart"></div></div>
+    <div class="section"><div class="section-head"><span class="section-title">Par projet</span></div><div id="ch-proj" class="bar-chart"></div></div>
   </div>
   <div class="grid-2">
-    <div class="section"><div class="section-head"><span class="section-title">Top Vehicles</span></div><div id="ch-veh" class="bar-chart"></div></div>
-    <div class="section"><div class="section-head"><span class="section-title">By Site</span></div><div id="ch-site" class="bar-chart"></div></div>
+    <div class="section"><div class="section-head"><span class="section-title">Top véhicules</span></div><div id="ch-veh" class="bar-chart"></div></div>
+    <div class="section"><div class="section-head"><span class="section-title">Par site</span></div><div id="ch-site" class="bar-chart"></div></div>
   </div>
 </div>
 
 <!-- RECEPTION FORM -->
 <div id="view-receive" class="page" hidden>
   <div class="form-card">
-    <h2>Fuel Reception</h2>
-    <div class="form-sub">Record incoming fuel delivery — N° Bordereau</div>
+    <h2>Réception de carburant</h2>
+    <div class="form-sub">Enregistrer une livraison de carburant — N° Bordereau</div>
     <div class="success-msg" id="rec-success"></div>
     <div class="error-msg" id="rec-error"></div>
 
     <div class="ref-preview" id="rec-ref-preview">
       <span class="ref-icon">&#128203;</span>
-      <span>Next reference: <span id="rec-next-ref">loading...</span></span>
+      <span>Prochaine référence : <span id="rec-next-ref">chargement...</span></span>
     </div>
 
-    <hr class="form-divider">
     <div class="form-group">
-      <label>Tank (destination)</label>
+      <label>Cuve (destination) <span class="field-required">*</span></label>
       <select id="rec-tank"></select>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Quantity (gallons)</label>
-        <input type="number" id="rec-qty" min="1" step="0.1" placeholder="e.g. 250">
+        <label>Quantité (gallons) <span class="field-required">*</span></label>
+        <input type="number" id="rec-qty" min="1" step="0.1" placeholder="ex. 250">
       </div>
       <div class="form-group">
-        <label>Supplier (Fournisseur)</label>
-        <input type="text" id="rec-party" list="rec-suppliers" placeholder="e.g. Total Haiti">
+        <label>Fournisseur</label>
+        <input type="text" id="rec-party" list="rec-suppliers" placeholder="ex. Total Haiti">
         <datalist id="rec-suppliers">
           <option value="Total Haiti">
           <option value="Shell Carib">
@@ -259,21 +298,21 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>N° Bordereau (reference)</label>
-        <input type="text" id="rec-reference" placeholder="Auto-generated if empty">
+        <label>N° Bordereau (référence)</label>
+        <input type="text" id="rec-reference" placeholder="Auto-généré si vide">
       </div>
       <div class="form-group">
-        <label>Carrier (Transporteur)</label>
-        <input type="text" id="rec-carrier" placeholder="Truck/carrier name">
+        <label>Transporteur</label>
+        <input type="text" id="rec-carrier" placeholder="Nom du camion/transporteur">
       </div>
     </div>
     <div class="form-group">
-      <label>Note (optional)</label>
-      <input type="text" id="rec-note" placeholder="Additional info">
+      <label>Note (optionnel)</label>
+      <input type="text" id="rec-note" placeholder="Informations supplémentaires">
     </div>
     <div class="form-actions">
-      <button class="btn btn-ghost" onclick="navigate('dashboard')">Cancel</button>
-      <button class="btn btn-green" id="btn-rec-submit">Record Reception</button>
+      <button class="btn btn-ghost" onclick="navigate('dashboard')">Annuler</button>
+      <button class="btn btn-green" id="btn-rec-submit">Enregistrer la réception</button>
     </div>
   </div>
 </div>
@@ -281,29 +320,28 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 <!-- DELIVERY FORM -->
 <div id="view-deliver" class="page" hidden>
   <div class="form-card">
-    <h2>Fuel Distribution</h2>
-    <div class="form-sub">Record fuel distribution to a vehicle — N° Recu</div>
+    <h2>Distribution de carburant</h2>
+    <div class="form-sub">Enregistrer une distribution de carburant — N° Reçu</div>
     <div class="success-msg" id="del-success"></div>
     <div class="error-msg" id="del-error"></div>
 
     <div class="ref-preview" id="del-ref-preview">
       <span class="ref-icon">&#128203;</span>
-      <span>Next reference: <span id="del-next-ref">loading...</span></span>
+      <span>Prochaine référence : <span id="del-next-ref">chargement...</span></span>
     </div>
 
-    <hr class="form-divider">
     <div class="form-group">
-      <label>Tank (source)</label>
+      <label>Cuve (source) <span class="field-required">*</span></label>
       <select id="del-tank"></select>
     </div>
     <div class="form-row">
       <div class="form-group">
-        <label>Quantity (gallons)</label>
-        <input type="number" id="del-qty" min="1" step="0.1" placeholder="e.g. 45">
+        <label>Quantité (gallons) <span class="field-required">*</span></label>
+        <input type="number" id="del-qty" min="1" step="0.1" placeholder="ex. 45">
       </div>
       <div class="form-group">
-        <label>Vehicle Plate *</label>
-        <input type="text" id="del-vehicle" list="del-vehicles" placeholder="e.g. AB-1234">
+        <label>Plaque véhicule <span class="field-required">*</span></label>
+        <input type="text" id="del-vehicle" list="del-vehicles" placeholder="ex. AB-1234">
         <datalist id="del-vehicles">
           <option value="AB-1234">
           <option value="CD-5678">
@@ -314,9 +352,9 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
     </div>
     <div class="form-row-3">
       <div class="form-group">
-        <label>Project</label>
+        <label>Projet</label>
         <select id="del-project">
-          <option value="">— Select —</option>
+          <option value="">— Sélectionner —</option>
           <option>Support</option>
           <option>Power</option>
           <option>Warehouse</option>
@@ -324,31 +362,31 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
         </select>
       </div>
       <div class="form-group">
-        <label>Receiver (Receveur)</label>
-        <input type="text" id="del-receiver" placeholder="Driver name">
+        <label>Receveur</label>
+        <input type="text" id="del-receiver" placeholder="Nom du chauffeur">
       </div>
       <div class="form-group">
-        <label>N° Recu (reference)</label>
-        <input type="text" id="del-reference" placeholder="Auto-generated if empty">
+        <label>N° Reçu (référence)</label>
+        <input type="text" id="del-reference" placeholder="Auto-généré si vide">
       </div>
     </div>
     <div class="form-row-3">
       <div class="form-group">
-        <label>Mileage (km)</label>
-        <input type="number" id="del-mileage" min="0" step="1" placeholder="Odometer">
+        <label>Kilométrage</label>
+        <input type="number" id="del-mileage" min="0" step="1" placeholder="Compteur km">
       </div>
       <div class="form-group">
-        <label>Fuel Card</label>
-        <input type="text" id="del-fuelcard" placeholder="Card number">
+        <label>Carte carburant</label>
+        <input type="text" id="del-fuelcard" placeholder="N° de carte">
       </div>
       <div class="form-group">
-        <label>Note (optional)</label>
-        <input type="text" id="del-note" placeholder="Additional info">
+        <label>Note (optionnel)</label>
+        <input type="text" id="del-note" placeholder="Informations supplémentaires">
       </div>
     </div>
     <div class="form-actions">
-      <button class="btn btn-ghost" onclick="navigate('dashboard')">Cancel</button>
-      <button class="btn btn-amber" id="btn-del-submit">Record Distribution</button>
+      <button class="btn btn-ghost" onclick="navigate('dashboard')">Annuler</button>
+      <button class="btn btn-amber" id="btn-del-submit">Enregistrer la distribution</button>
     </div>
   </div>
 </div>
@@ -356,18 +394,18 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 <!-- HISTORY -->
 <div id="view-history" class="page" hidden>
   <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
-    <h2 style="font-size:20px;font-weight:800;">Document History</h2>
+    <h2 style="font-size:20px;font-weight:800;">Historique des documents</h2>
     <div style="display:flex;gap:8px;align-items:center;">
       <select id="hist-type" style="width:140px;font-size:12px;padding:8px 12px;">
-        <option value="">All types</option>
-        <option value="RECEIVING">Reception</option>
+        <option value="">Tous les types</option>
+        <option value="RECEIVING">Réception</option>
         <option value="DELIVERY">Distribution</option>
       </select>
-      <input type="text" id="hist-search" placeholder="Search ref, vehicle, supplier..." style="width:220px;font-size:12px;padding:8px 12px;">
+      <input type="text" id="hist-search" placeholder="Chercher réf, véhicule, fournisseur..." style="width:260px;font-size:12px;padding:8px 12px;">
     </div>
   </div>
   <div class="section" style="padding:14px;">
-    <div id="hist-list"><div class="loading"><div class="spinner"></div>Loading...</div></div>
+    <div id="hist-list"><div class="loading"><div class="spinner"></div>Chargement...</div></div>
     <div class="pagination" id="hist-pagination" hidden></div>
   </div>
 </div>
@@ -378,8 +416,8 @@ select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='ht
 </div>
 
 <div class="footer" id="main-footer" hidden>
-  Built by <a href="https://www.linkedin.com/in/idens-meranvil" target="_blank">Idens Meranvil</a>
-  &nbsp;&middot;&nbsp; Python &middot; FastAPI &middot; SQLite &nbsp;&middot;&nbsp; Deployed on Render
+  Conçu par <a href="https://www.linkedin.com/in/idens-meranvil" target="_blank">Idens Meranvil</a>
+  &nbsp;&middot;&nbsp; Python &middot; FastAPI &middot; SQLite &nbsp;&middot;&nbsp; Déployé sur Render
 </div>
 
 <script>
@@ -398,9 +436,9 @@ async function api(method, path, body) {
   const opts = {method, headers: H()};
   if (body) opts.body = JSON.stringify(body);
   const r = await fetch(path, opts);
-  if (r.status === 401) { logout(); throw new Error('Session expired'); }
+  if (r.status === 401) { logout(); throw new Error('Session expirée'); }
   const data = await r.json();
-  if (!r.ok) throw new Error(data.detail || 'Error');
+  if (!r.ok) throw new Error(data.detail || 'Erreur');
   data._totalCount = r.headers.get('X-Total-Count');
   return data;
 }
@@ -421,6 +459,7 @@ function navigate(view) {
   if (view === 'receive') { loadProducts(); loadNextRef('RECEIVING'); }
   if (view === 'deliver') { loadProducts(); loadNextRef('DELIVERY'); }
   if (view === 'history') loadHistory();
+  window.scrollTo(0, 0);
 }
 
 document.querySelectorAll('.nav-link').forEach(b => {
@@ -430,10 +469,11 @@ document.querySelectorAll('.nav-link').forEach(b => {
 /* === LOGIN === */
 $('btn-login').addEventListener('click', doLogin);
 $('login-pass').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
+$('login-user').addEventListener('keydown', e => { if(e.key==='Enter') doLogin(); });
 
 async function doLogin() {
   const btn = $('btn-login');
-  btn.disabled = true; btn.textContent = 'Signing in...';
+  btn.disabled = true; btn.textContent = 'Connexion...';
   $('login-error').style.display = 'none';
   try {
     const data = await fetch('/login', {
@@ -445,10 +485,10 @@ async function doLogin() {
     $('nav-user').textContent = USER.display_name || USER.username;
     navigate('dashboard');
   } catch(e) {
-    $('login-error').textContent = e.detail || e.message || 'Login failed';
+    $('login-error').textContent = e.detail || e.message || 'Échec de connexion';
     $('login-error').style.display = 'block';
   }
-  btn.disabled = false; btn.textContent = 'Sign In';
+  btn.disabled = false; btn.textContent = 'Se connecter';
 }
 
 $('btn-logout').addEventListener('click', logout);
@@ -471,13 +511,13 @@ async function loadNextRef(type) {
 
 /* === DASHBOARD === */
 async function loadDashboard() {
-  $('dash-status').textContent = 'Loading...';
+  $('dash-status').textContent = 'Chargement...';
   try {
     const d = await api('GET','/demo/summary');
     const prods = d.products||[];
     PRODUCTS = prods;
     const stock = prods.reduce((s,p)=>s+(p.current_stock||0),0);
-    $('k-stock').textContent = stock.toLocaleString();
+    $('k-stock').textContent = stock.toLocaleString('fr-FR');
     $('k-rec').textContent = d.receptions||0;
     $('k-del').textContent = d.deliveries||0;
     $('k-tanks').textContent = prods.length;
@@ -486,9 +526,37 @@ async function loadDashboard() {
     renderBar('ch-proj', d.by_project);
     renderBar('ch-veh', d.by_vehicle);
     renderBar('ch-site', d.by_site);
-    $('dash-status').textContent = 'Live';
+    $('dash-status').textContent = 'En ligne';
+    $('dash-time').textContent = 'Mis à jour : ' + new Date().toLocaleTimeString('fr-FR', {hour:'2-digit',minute:'2-digit'});
+    loadRecentActivity();
   } catch(e) {
-    $('dash-status').textContent = 'Error';
+    $('dash-status').textContent = 'Erreur';
+  }
+}
+
+/* === RECENT ACTIVITY === */
+async function loadRecentActivity() {
+  const el=$('dash-activity');
+  try {
+    const docs = await api('GET','/documents?limit=8&offset=0');
+    $('activity-badge').textContent = 'Dernières opérations';
+    if(!docs.length){el.innerHTML='<span style="color:var(--t3);padding:8px;">Aucune activité</span>';return;}
+    el.innerHTML=docs.map(d=>{
+      const isRec=d.type==='RECEIVING';
+      const dotCls=isRec?'rec':'del';
+      const typeLabel=isRec?'Réception':'Distribution';
+      const ref=esc(d.reference)||'#'+d.id;
+      const parts=[];
+      if(d.party) parts.push(d.party);
+      if(d.vehicle_plate) parts.push(d.vehicle_plate);
+      if(d.project) parts.push(d.project);
+      const info=parts.join(' · ')||'';
+      const qty=d.lines&&d.lines.length?d.lines.reduce((s,l)=>s+l.quantity,0):0;
+      const time=d.created_at?d.created_at.slice(11,16):'';
+      return `<div class="activity-item" onclick="showDetail(${parseInt(d.id)})"><span class="activity-dot ${dotCls}"></span><span class="activity-time">${esc(time)}</span><span class="activity-ref">${ref}</span><span class="activity-info">${esc(typeLabel)} — ${qty.toLocaleString('fr-FR')} gal${info?' · '+esc(info):''}</span></div>`;
+    }).join('');
+  } catch(e) {
+    el.innerHTML='<span style="color:var(--t3);padding:8px;">—</span>';
   }
 }
 
@@ -523,23 +591,29 @@ function tankSVG(pct, w=80, h=120) {
 
 function renderTanks(prods) {
   const el=$('dash-tanks');
-  $('tank-badge').textContent=prods.length+' tanks';
+  $('tank-badge').textContent=prods.length+' cuves';
+  let lowCount=0;
   el.innerHTML=prods.map(p=>{
     const cap=p.tank_capacity||1,stk=p.current_stock||0;
     const pct=Math.min(100,stk/cap*100);
     const av=Math.max(0,cap-stk);
     const label=p.name.includes('—')?p.name.split('—')[0].trim():p.name;
-    return `<div class="tank-gauge">${tankSVG(pct)}<div class="tank-label">${esc(label)}</div><div class="tank-site">${esc(p.site)}</div><div class="tank-val">${stk.toLocaleString()} gal</div><div class="tank-avail">${av.toLocaleString()} avail</div></div>`;
+    const isLow=pct<20;
+    if(isLow) lowCount++;
+    return `<div class="tank-gauge">${tankSVG(pct)}<div class="tank-label">${esc(label)}</div><div class="tank-site">${esc(p.site)}</div><div class="tank-val">${stk.toLocaleString('fr-FR')} gal</div><div class="tank-avail">${av.toLocaleString('fr-FR')} dispo</div>${isLow?'<div class="tank-warn">Niveau bas</div>':''}</div>`;
   }).join('');
+  const warnBadge=$('tank-warn-badge');
+  if(lowCount>0){warnBadge.textContent=lowCount+' alerte'+(lowCount>1?'s':'');warnBadge.hidden=false;}
+  else{warnBadge.hidden=true;}
 }
 
 const COLORS=['#3b82f6','#6366f1','#22c55e','#f59e0b','#ef4444','#ec4899','#14b8a6'];
 function renderBar(id,data){
-  const el=$(id); if(!data||!data.length){el.innerHTML='<span style="color:var(--t3)">No data</span>';return;}
+  const el=$(id); if(!data||!data.length){el.innerHTML='<span style="color:var(--t3)">Aucune donnée</span>';return;}
   const mx=Math.max(...data.map(d=>d.total));
   el.innerHTML=data.map((d,i)=>{
     const w=mx>0?(d.total/mx*100):0;
-    return `<div class="bar-item"><span class="bar-name">${esc(d.name)}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${COLORS[i%COLORS.length]}"></div></div><span class="bar-val">${d.total.toLocaleString()} gal</span></div>`;
+    return `<div class="bar-item"><span class="bar-name">${esc(d.name)}</span><div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${COLORS[i%COLORS.length]}"></div></div><span class="bar-val">${d.total.toLocaleString('fr-FR')} gal</span></div>`;
   }).join('');
 }
 
@@ -562,8 +636,8 @@ async function loadProducts() {
 function fillSelects() {
   ['rec-tank','del-tank'].forEach(id => {
     const sel = $(id);
-    sel.innerHTML = '<option value="">— Select tank —</option>' +
-      PRODUCTS.map(p => `<option value="${p.id}">${esc(p.name)} (${(p.current_stock||0).toLocaleString()} / ${(p.tank_capacity||0).toLocaleString()} gal)</option>`).join('');
+    sel.innerHTML = '<option value="">— Sélectionner une cuve —</option>' +
+      PRODUCTS.map(p => `<option value="${p.id}">${esc(p.name)} (${(p.current_stock||0).toLocaleString('fr-FR')} / ${(p.tank_capacity||0).toLocaleString('fr-FR')} gal)</option>`).join('');
   });
 }
 
@@ -572,7 +646,8 @@ $('btn-rec-submit').addEventListener('click', async () => {
   const btn=$('btn-rec-submit'); btn.disabled=true;
   $('rec-success').style.display='none'; $('rec-error').style.display='none';
   const tank=$('rec-tank').value, qty=parseFloat($('rec-qty').value), party=$('rec-party').value;
-  if(!tank||!qty){$('rec-error').textContent='Select a tank and enter quantity';$('rec-error').style.display='block';btn.disabled=false;return;}
+  if(!tank){showErr('rec-error','Veuillez sélectionner une cuve');btn.disabled=false;return;}
+  if(!qty||qty<=0){showErr('rec-error','Veuillez entrer une quantité valide');btn.disabled=false;return;}
   try {
     const payload = {
       type:'RECEIVING',
@@ -584,14 +659,14 @@ $('btn-rec-submit').addEventListener('click', async () => {
     };
     const doc = await api('POST','/documents', payload);
     const ref = doc.reference || doc.id;
-    $('rec-success').innerHTML=`<strong>${ref}</strong> — Reception recorded. Stock updated.`;
+    $('rec-success').innerHTML=`<strong>${esc(String(ref))}</strong> — Réception enregistrée. Stock mis à jour.`;
     $('rec-success').style.display='block';
     $('rec-qty').value=''; $('rec-party').value=''; $('rec-note').value='';
     $('rec-reference').value=''; $('rec-carrier').value='';
     PRODUCTS=[];
     loadNextRef('RECEIVING');
   } catch(e) {
-    $('rec-error').textContent=e.message; $('rec-error').style.display='block';
+    showErr('rec-error', e.message);
   }
   btn.disabled=false;
 });
@@ -602,8 +677,9 @@ $('btn-del-submit').addEventListener('click', async () => {
   $('del-success').style.display='none'; $('del-error').style.display='none';
   const tank=$('del-tank').value, qty=parseFloat($('del-qty').value);
   const vehicle=$('del-vehicle').value;
-  if(!tank||!qty){$('del-error').textContent='Select a tank and enter quantity';$('del-error').style.display='block';btn.disabled=false;return;}
-  if(!vehicle){$('del-error').textContent='Vehicle plate is required for fuel distribution';$('del-error').style.display='block';btn.disabled=false;return;}
+  if(!tank){showErr('del-error','Veuillez sélectionner une cuve');btn.disabled=false;return;}
+  if(!qty||qty<=0){showErr('del-error','Veuillez entrer une quantité valide');btn.disabled=false;return;}
+  if(!vehicle.trim()){showErr('del-error','La plaque du véhicule est obligatoire');btn.disabled=false;return;}
   try {
     const payload = {
       type:'DELIVERY',
@@ -618,7 +694,7 @@ $('btn-del-submit').addEventListener('click', async () => {
     };
     const doc = await api('POST','/documents', payload);
     const ref = doc.reference || doc.id;
-    $('del-success').innerHTML=`<strong>${ref}</strong> — Distribution recorded. Stock updated.`;
+    $('del-success').innerHTML=`<strong>${esc(String(ref))}</strong> — Distribution enregistrée. Stock mis à jour.`;
     $('del-success').style.display='block';
     $('del-qty').value=''; $('del-vehicle').value=''; $('del-receiver').value='';
     $('del-note').value=''; $('del-reference').value=''; $('del-mileage').value='';
@@ -626,16 +702,21 @@ $('btn-del-submit').addEventListener('click', async () => {
     PRODUCTS=[];
     loadNextRef('DELIVERY');
   } catch(e) {
-    $('del-error').textContent=e.message; $('del-error').style.display='block';
+    showErr('del-error', e.message);
   }
   btn.disabled=false;
 });
+
+function showErr(id, msg) {
+  const el=$(id); el.textContent=msg; el.style.display='block';
+  el.scrollIntoView({behavior:'smooth',block:'center'});
+}
 
 /* === HISTORY === */
 let histOffset=0, histLimit=20;
 async function loadHistory() {
   const el=$('hist-list');
-  el.innerHTML='<div class="loading"><div class="spinner"></div>Loading...</div>';
+  el.innerHTML='<div class="loading"><div class="spinner"></div>Chargement...</div>';
   const type=$('hist-type').value;
   const search=$('hist-search').value;
   let url=`/documents?limit=${histLimit}&offset=${histOffset}`;
@@ -644,18 +725,18 @@ async function loadHistory() {
   try {
     const docs = await api('GET', url);
     const total = parseInt(docs._totalCount)||0;
-    if(!docs.length){el.innerHTML='<span style="color:var(--t3);padding:16px;">No documents found</span>';$('hist-pagination').hidden=true;return;}
-    let html='<div class="doc-table"><div class="doc-row header"><span>Reference</span><span>Type</span><span>Details</span><span>Quantity</span><span>Date</span></div>';
+    if(!docs.length){el.innerHTML='<span style="color:var(--t3);padding:16px;">Aucun document trouvé</span>';$('hist-pagination').hidden=true;return;}
+    let html='<div class="doc-table"><div class="doc-row header"><span>Référence</span><span>Type</span><span>Détails</span><span>Quantité</span><span>Date</span></div>';
     html+=docs.map(d=>{
       const isRec=d.type==='RECEIVING';
-      const badge=isRec?'<span class="doc-badge rec">Reception</span>':'<span class="doc-badge del">Distribution</span>';
+      const badge=isRec?'<span class="doc-badge rec">Réception</span>':'<span class="doc-badge del">Distribution</span>';
       const parts=[];
       if(d.party) parts.push(d.party);
       if(d.vehicle_plate) parts.push(d.vehicle_plate);
       if(d.project) parts.push(d.project);
       if(d.receiver) parts.push(d.receiver);
       const info=parts.join(' · ')||'—';
-      const qty=d.lines&&d.lines.length?d.lines.reduce((s,l)=>s+l.quantity,0).toLocaleString()+' gal':'';
+      const qty=d.lines&&d.lines.length?d.lines.reduce((s,l)=>s+l.quantity,0).toLocaleString('fr-FR')+' gal':'';
       const dt=d.created_at?d.created_at.slice(0,10):'';
       return `<div class="doc-row clickable" onclick="showDetail(${parseInt(d.id)})"><span class="doc-ref">${esc(d.reference)||'#'+d.id}</span>${badge}<span class="doc-info" title="${esc(info)}">${esc(info)}</span><span class="doc-qty">${qty}</span><span class="doc-date">${esc(dt)}</span></div>`;
     }).join('');
@@ -665,7 +746,7 @@ async function loadHistory() {
     const curPage=Math.floor(histOffset/histLimit)+1;
     if(pages>1){
       $('hist-pagination').hidden=false;
-      $('hist-pagination').innerHTML=`<button ${curPage<=1?'disabled':''} onclick="histPage(${histOffset-histLimit})">Prev</button><span>Page ${curPage} / ${pages} (${total} docs)</span><button ${curPage>=pages?'disabled':''} onclick="histPage(${histOffset+histLimit})">Next</button>`;
+      $('hist-pagination').innerHTML=`<button ${curPage<=1?'disabled':''} onclick="histPage(${histOffset-histLimit})">Précédent</button><span>Page ${curPage} / ${pages} (${total} docs)</span><button ${curPage>=pages?'disabled':''} onclick="histPage(${histOffset+histLimit})">Suivant</button>`;
     } else {
       $('hist-pagination').hidden=true;
     }
@@ -682,31 +763,34 @@ $('hist-search').addEventListener('input',()=>{clearTimeout(histTimer);histTimer
 window.showDetail=async function(docId) {
   navigate('detail');
   const el=$('detail-content');
-  el.innerHTML='<div class="loading"><div class="spinner"></div>Loading...</div>';
+  el.innerHTML='<div class="loading"><div class="spinner"></div>Chargement...</div>';
   try {
     const doc = await api('GET', '/documents/'+docId);
     const isRec = doc.type==='RECEIVING';
-    const badge = isRec?'<span class="doc-badge rec" style="font-size:11px;padding:4px 10px;">Reception</span>':'<span class="doc-badge del" style="font-size:11px;padding:4px 10px;">Distribution</span>';
+    const badge = isRec?'<span class="doc-badge rec" style="font-size:11px;padding:4px 10px;">Réception</span>':'<span class="doc-badge del" style="font-size:11px;padding:4px 10px;">Distribution</span>';
     const ref = esc(doc.reference) || '#'+doc.id;
-    let html = `<div class="detail-header"><button class="btn btn-ghost" style="padding:6px 12px;" onclick="navigate('history')">Back</button><span class="detail-ref">${ref}</span>${badge}</div>`;
+    let html = `<div class="detail-header"><button class="btn btn-ghost no-print" style="padding:6px 12px;" onclick="navigate('history')">Retour</button><span class="detail-ref">${ref}</span>${badge}<button class="btn btn-ghost no-print" style="padding:6px 12px;" onclick="window.print()" title="Imprimer">&#128424; Imprimer</button></div>`;
     html += '<div class="detail-grid">';
-    html += field('Date', doc.created_at ? doc.created_at.replace('T',' ').slice(0,16) : '—');
-    html += field('Created by', esc(doc.created_by) || '—');
-    if(doc.party) html += field(isRec?'Supplier':'Party', esc(doc.party));
-    if(doc.vehicle_plate) html += field('Vehicle Plate', esc(doc.vehicle_plate));
-    if(doc.project) html += field('Project', esc(doc.project));
-    if(doc.receiver) html += field('Receiver', esc(doc.receiver));
-    if(doc.carrier) html += field('Carrier', esc(doc.carrier));
-    if(doc.mileage) html += field('Mileage', esc(doc.mileage) + ' km');
-    if(doc.fuel_card) html += field('Fuel Card', esc(doc.fuel_card));
+    html += field('Date', doc.created_at ? formatDate(doc.created_at) : '—');
+    html += field('Créé par', esc(doc.created_by) || '—');
+    if(doc.party) html += field(isRec?'Fournisseur':'Tiers', esc(doc.party));
+    if(doc.vehicle_plate) html += field('Plaque véhicule', esc(doc.vehicle_plate));
+    if(doc.project) html += field('Projet', esc(doc.project));
+    if(doc.receiver) html += field('Receveur', esc(doc.receiver));
+    if(doc.carrier) html += field('Transporteur', esc(doc.carrier));
+    if(doc.mileage) html += field('Kilométrage', esc(doc.mileage) + ' km');
+    if(doc.fuel_card) html += field('Carte carburant', esc(doc.fuel_card));
     if(doc.note) html += field('Note', esc(doc.note));
     html += '</div>';
     if(doc.lines && doc.lines.length) {
-      html += '<div class="detail-lines"><div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--t3);margin-bottom:8px;">Lines</div>';
+      let totalQty = 0;
+      html += '<div class="detail-lines"><div style="font-size:11px;font-weight:600;text-transform:uppercase;color:var(--t3);margin-bottom:8px;">Lignes du document</div>';
       doc.lines.forEach(l => {
-        const pname = esc(l.name || l.product_name || l.sku || l.product_sku) || ('Product #'+l.product_id);
-        html += `<div class="detail-line"><span>${pname}</span><span style="font-family:var(--mono);font-weight:600;">${l.quantity.toLocaleString()} gal</span></div>`;
+        const pname = esc(l.name || l.product_name || l.sku || l.product_sku) || ('Produit #'+l.product_id);
+        totalQty += l.quantity;
+        html += `<div class="detail-line"><span>${pname}</span><span style="font-family:var(--mono);font-weight:600;">${l.quantity.toLocaleString('fr-FR')} gal</span></div>`;
       });
+      html += `<div class="detail-total"><span>Total</span><span>${totalQty.toLocaleString('fr-FR')} gal</span></div>`;
       html += '</div>';
     }
     el.innerHTML = html;
@@ -715,6 +799,10 @@ window.showDetail=async function(docId) {
   }
 };
 function field(label,val){return `<div class="detail-field"><div class="detail-field-label">${label}</div><div class="detail-field-val">${val}</div></div>`;}
+function formatDate(iso){
+  try{const d=new Date(iso);return d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short',year:'numeric'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});}
+  catch(e){return iso.replace('T',' ').slice(0,16);}
+}
 
 /* === INIT === */
 navigate('login');
