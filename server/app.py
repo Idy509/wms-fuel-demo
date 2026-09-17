@@ -96,6 +96,7 @@ from websocket_manager import (
 )
 
 _MODE_DEV = bool(os.getenv("WMS_DEV"))
+_DEMO_MODE = os.environ.get("WMS_DEMO_MODE") == "1"
 log = logger(__name__)
 
 # --- Anti brute-force login ---
@@ -450,9 +451,9 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Warehouse API",
     lifespan=lifespan,
-    docs_url="/docs" if _MODE_DEV else None,
+    docs_url="/docs" if (_MODE_DEV or _DEMO_MODE) else None,
     redoc_url=None,
-    openapi_url="/openapi.json" if _MODE_DEV else None,
+    openapi_url="/openapi.json" if (_MODE_DEV or _DEMO_MODE) else None,
 )
 
 app.include_router(board_router)
