@@ -708,10 +708,13 @@ def demo_summary():
             "recent_documents": docs,
         }
     except Exception as exc:
+        from chemins import chemin_base
+        db = chemin_base()
         return JSONResponse(status_code=500, content={
             "detail": str(exc),
-            "db_path": str(database.DB_PATH),
-            "db_exists": database.DB_PATH.exists(),
+            "db_path": str(db),
+            "db_exists": db.exists(),
+            "cwd": os.getcwd(),
         })
 
 
