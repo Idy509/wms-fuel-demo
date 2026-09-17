@@ -331,29 +331,6 @@ body {
 </div>
 
 <script>
-const API = '';
-let token = null;
-
-async function login() {
-  try {
-    const r = await fetch(API + '/login', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({username: 'DemoFuel', password: 'Carburant2024!'})
-    });
-    if (!r.ok) return null;
-    const d = await r.json();
-    return d.token;
-  } catch { return null; }
-}
-
-async function apiFetch(path) {
-  if (!token) return null;
-  const r = await fetch(API + path, {headers: {'X-User-Token': token}});
-  if (!r.ok) return null;
-  return r.json();
-}
-
 function pctColor(pct) {
   if (pct > 90) return 'var(--red)';
   if (pct > 75) return 'var(--orange)';
@@ -362,7 +339,7 @@ function pctColor(pct) {
 
 function renderTanks(products) {
   const c = document.getElementById('tanks-container');
-  if (!products || !products.length) { c.innerHTML = '<p style="color:var(--text-muted)">No tanks found</p>'; return; }
+  if (!products || !products.length) { c.innerHTML = '<p style="color:var(--text-muted)">No tanks configured</p>'; return; }
   c.innerHTML = products.map(p => {
     const cap = p.tank_capacity || 1;
     const stock = p.current_stock || 0;
@@ -393,8 +370,8 @@ function docTypeLabel(t) {
 
 function renderDocs(docs) {
   const c = document.getElementById('docs-container');
-  if (!docs || !docs.length) { c.innerHTML = '<p style="color:var(--text-muted)">No documents found</p>'; return; }
-  c.innerHTML = docs.slice(0, 8).map(d => {
+  if (!docs || !docs.length) { c.innerHTML = '<p style="color:var(--text-muted)">No operations yet</p>'; return; }
+  c.innerHTML = docs.map(d => {
     const [label, cls] = docTypeLabel(d.doc_type);
     const dt = d.created_at ? d.created_at.slice(0, 10) : '';
     return `<div class="doc-row">
@@ -407,9 +384,8 @@ function renderDocs(docs) {
 
 async function init() {
   const badge = document.getElementById('status-badge');
-  // Health check
   try {
-    const h = await fetch(API + '/health');
+    const h = await fetch('/health');
     const hd = await h.json();
     document.getElementById('api-status').textContent = hd.status === 'ok' ? 'Online' : 'Error';
     badge.textContent = 'Live';
@@ -422,30 +398,21 @@ async function init() {
     return;
   }
 
-  token = await login();
-  if (!token) {
-    document.getElementById('tanks-container').innerHTML = '<p style="color:var(--text-muted)">Auth unavailable</p>';
-    document.getElementById('docs-container').innerHTML = '<p style="color:var(--text-muted)">Auth unavailable</p>';
-    return;
-  }
+  try {
+    const r = await fetch('/demo/summary');
+    if (!r.ok) throw new Error('summary unavailable');
+    const data = await r.json();
 
-  const [products, docs] = await Promise.all([
-    apiFetch('/products'),
-    apiFetch('/documents?limit=8')
-  ]);
-
-  // Stats
-  if (products) {
+    const products = data.products || [];
     const totalStock = products.reduce((s, p) => s + (p.current_stock || 0), 0);
     document.getElementById('total-stock').textContent = totalStock.toLocaleString();
     document.getElementById('active-tanks').textContent = products.length;
+    document.getElementById('total-docs').textContent = data.total_documents || 0;
     renderTanks(products);
-  }
-
-  if (docs) {
-    const list = docs.documents || docs;
-    document.getElementById('total-docs').textContent = docs.total || list.length;
-    renderDocs(list);
+    renderDocs(data.recent_documents || []);
+  } catch {
+    document.getElementById('tanks-container').innerHTML = '<p style="color:var(--text-muted)">Data unavailable</p>';
+    document.getElementById('docs-container').innerHTML = '<p style="color:var(--text-muted)">Data unavailable</p>';
   }
 }
 
