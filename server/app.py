@@ -4887,7 +4887,8 @@ def get_document(document_id: int, user=Depends(exiger_utilisateur)):
             raise HTTPException(status_code=404, detail="Document introuvable")
         doc = dict(doc)
         lines = [dict(r) for r in conn.execute(
-            "SELECT dl.product_id, dl.quantity, p.sku AS product_sku, p.name AS product_name "
+            "SELECT dl.id, dl.product_id, dl.quantity, dl.counted_quantity, "
+            "dl.received_quantity, p.sku, p.name "
             "FROM document_lines dl LEFT JOIN products p ON p.id = dl.product_id "
             "WHERE dl.document_id = ?", (document_id,)
         ).fetchall()]
