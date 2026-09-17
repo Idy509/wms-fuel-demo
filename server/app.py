@@ -688,6 +688,48 @@ def health():
     return {"status": "ok"}
 
 
+def _next_reference(conn, doc_type: str) -> str:
+    """Auto-generate a sequential reference number using doc_counters.
+
+    RECEIVING → REC-2026-0001, DELIVERY → DEL-2026-0001, etc.
+    """
+    prefix = {"RECEIVING": "REC", "DELIVERY": "DEL",
+              "RETURN": "RET", "SUPPLIER_RETURN": "SRET"}.get(doc_type, "DOC")
+    year = datetime.now().year
+    row = conn.execute(
+        "SELECT seq FROM doc_counters WHERE type_prefix=? AND year=?",
+        (prefix, year),
+    ).fetchone()
+    if row:
+        new_seq = row[0] + 1
+        conn.execute(
+            "UPDATE doc_counters SET seq=? WHERE type_prefix=? AND year=?",
+            (new_seq, prefix, year),
+        )
+    else:
+        new_seq = 1
+        conn.execute(
+            "INSERT INTO doc_counters (type_prefix, year, seq) VALUES (?, ?, ?)",
+            (prefix, year, new_seq),
+        )
+    return f"{prefix}-{year}-{new_seq:04d}"
+
+
+@app.get("/next-reference")
+def next_reference(type: str = "RECEIVING", user=Depends(exiger_ecriture)):
+    """Preview the next auto-generated reference number."""
+    prefix = {"RECEIVING": "REC", "DELIVERY": "DEL",
+              "RETURN": "RET", "SUPPLIER_RETURN": "SRET"}.get(type, "DOC")
+    year = datetime.now().year
+    with get_conn() as conn:
+        row = conn.execute(
+            "SELECT seq FROM doc_counters WHERE type_prefix=? AND year=?",
+            (prefix, year),
+        ).fetchone()
+        next_seq = (row[0] + 1) if row else 1
+    return {"reference": f"{prefix}-{year}-{next_seq:04d}"}
+
+
 @app.get("/demo/summary")
 def demo_summary():
     """Public endpoint for the web dashboard — no auth required."""
@@ -3934,17 +3976,16 @@ def create_document(document: DocumentIn, response: Response,
             if not document.party:
                 document.party = contact["name"]
 
-        # Une seule horloge : l'heure locale de l'entrepôt. La date métier
-        # peut être antidatée par l'opérateur, la date de réception non.
         recu_le = maintenant_texte()
         saisisseur = user["display_name"] if user else document.created_by
+        ref = document.reference or _next_reference(conn, document.type)
         cur = conn.execute(
             "INSERT INTO documents (type, party, party_contact_id, operator, region, reference, note, "
             "carrier, technician, idempotency_key, created_by, station, server_received_at, created_at, "
             "sector, vehicle_plate, vehicle_info, mileage, project, receiver, fuel_card) "
             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             (document.type, document.party, document.party_contact_id, document.operator, document.region,
-             document.reference, document.note, document.carrier, document.technician,
+             ref, document.note, document.carrier, document.technician,
              document.idempotency_key,
              saisisseur, "", recu_le, document.created_at or recu_le, secteur,
              document.vehicle_plate, document.vehicle_info, document.mileage,
@@ -4832,6 +4873,26 @@ def list_documents(
     response.headers["X-Total-Count"] = str(total)
     response.headers["X-Returned-Count"] = str(len(documents))
     return documents
+
+
+@app.get("/documents/{document_id}", response_model=DocumentOut)
+def get_document(document_id: int, user=Depends(exiger_utilisateur)):
+    with get_conn() as conn:
+        secteur = _secteur_du_compte(conn, user)
+        doc = conn.execute(
+            "SELECT * FROM documents WHERE id = ? AND sector = ?",
+            (document_id, secteur),
+        ).fetchone()
+        if not doc:
+            raise HTTPException(status_code=404, detail="Document introuvable")
+        doc = dict(doc)
+        lines = [dict(r) for r in conn.execute(
+            "SELECT dl.product_id, dl.quantity, p.sku AS product_sku, p.name AS product_name "
+            "FROM document_lines dl LEFT JOIN products p ON p.id = dl.product_id "
+            "WHERE dl.document_id = ?", (document_id,)
+        ).fetchall()]
+        doc["lines"] = lines
+    return doc
 
 
 @app.get("/documents/export")
