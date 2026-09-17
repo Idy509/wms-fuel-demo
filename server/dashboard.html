@@ -363,7 +363,7 @@ function renderTanks(products) {
 
 function docTypeLabel(t) {
   if (t === 'RECEIVING') return ['Reception', 'rec'];
-  if (t === 'DISTRIBUTION') return ['Distribution', 'dist'];
+  if (t === 'DELIVERY') return ['Distribution', 'dist'];
   if (t === 'GAUGING') return ['Gauging', 'gauge'];
   return [t, ''];
 }
@@ -372,7 +372,7 @@ function renderDocs(docs) {
   const c = document.getElementById('docs-container');
   if (!docs || !docs.length) { c.innerHTML = '<p style="color:var(--text-muted)">No operations yet</p>'; return; }
   c.innerHTML = docs.map(d => {
-    const [label, cls] = docTypeLabel(d.doc_type);
+    const [label, cls] = docTypeLabel(d.type);
     const dt = d.created_at ? d.created_at.slice(0, 10) : '';
     return `<div class="doc-row">
       <span class="doc-ref">${d.reference || '—'}</span>

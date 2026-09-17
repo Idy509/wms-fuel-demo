@@ -733,7 +733,7 @@ def demo_summary():
             ).fetchall()]
             doc_count = conn.execute("SELECT count(*) FROM documents").fetchone()[0]
             docs = [dict(r) for r in conn.execute(
-                "SELECT reference, doc_type, created_at FROM documents "
+                "SELECT reference, type, created_at FROM documents "
                 "ORDER BY created_at DESC LIMIT 8"
             ).fetchall()]
         return {
