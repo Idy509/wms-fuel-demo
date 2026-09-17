@@ -692,20 +692,27 @@ def demo_summary():
     """Public endpoint for the web dashboard — no auth required."""
     if os.environ.get("WMS_DEMO_MODE") != "1":
         raise HTTPException(status_code=404, detail="Not Found")
-    with get_conn() as conn:
-        products = [dict(r) for r in conn.execute(
-            "SELECT id, sku, name, tank_capacity, current_stock FROM products"
-        ).fetchall()]
-        doc_count = conn.execute("SELECT count(*) FROM documents").fetchone()[0]
-        docs = [dict(r) for r in conn.execute(
-            "SELECT reference, doc_type, created_at FROM documents "
-            "ORDER BY created_at DESC LIMIT 8"
-        ).fetchall()]
-    return {
-        "products": products,
-        "total_documents": doc_count,
-        "recent_documents": docs,
-    }
+    try:
+        with get_conn() as conn:
+            products = [dict(r) for r in conn.execute(
+                "SELECT id, sku, name, tank_capacity, current_stock FROM products"
+            ).fetchall()]
+            doc_count = conn.execute("SELECT count(*) FROM documents").fetchone()[0]
+            docs = [dict(r) for r in conn.execute(
+                "SELECT reference, doc_type, created_at FROM documents "
+                "ORDER BY created_at DESC LIMIT 8"
+            ).fetchall()]
+        return {
+            "products": products,
+            "total_documents": doc_count,
+            "recent_documents": docs,
+        }
+    except Exception as exc:
+        return JSONResponse(status_code=500, content={
+            "detail": str(exc),
+            "db_path": str(database.DB_PATH),
+            "db_exists": database.DB_PATH.exists(),
+        })
 
 
 @app.get("/backup/statut")
