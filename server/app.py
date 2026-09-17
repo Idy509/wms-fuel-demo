@@ -17,7 +17,7 @@ from fastapi import (BackgroundTasks, Depends, FastAPI, Header, HTTPException, Q
                      Request, UploadFile)
 from fastapi.encoders import jsonable_encoder
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import HTMLResponse, JSONResponse, Response
 
 import backup
 from backup import attendre_planificateur, demarrer_planificateur
@@ -475,6 +475,13 @@ if _board_dir.is_dir():
             return response
 
     app.mount("/board", _BoardStaticFiles(directory=str(_board_dir), html=True), name="board")
+
+
+_DASHBOARD_HTML = (_pathlib.Path(__file__).resolve().parent / "dashboard.html").read_text(encoding="utf-8")
+
+@app.get("/", response_class=HTMLResponse, include_in_schema=False)
+def dashboard_page():
+    return _DASHBOARD_HTML
 
 
 @app.middleware("http")

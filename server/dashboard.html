@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WMS Fuel Management — Live Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f1117;
+  --surface: #1a1d27;
+  --surface-2: #232736;
+  --border: #2e3348;
+  --text: #e8eaf0;
+  --text-muted: #8b90a5;
+  --accent: #3b82f6;
+  --accent-soft: rgba(59,130,246,0.12);
+  --green: #22c55e;
+  --green-soft: rgba(34,197,94,0.12);
+  --orange: #f59e0b;
+  --orange-soft: rgba(245,158,11,0.12);
+  --red: #ef4444;
+  --red-soft: rgba(239,68,68,0.12);
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+  min-height: 100vh;
+}
+.header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 1.25rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+.header-left { display: flex; align-items: center; gap: 0.75rem; }
+.logo {
+  width: 40px; height: 40px;
+  background: var(--accent);
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.25rem; font-weight: 700; color: #fff;
+}
+.header h1 { font-size: 1.1rem; font-weight: 600; }
+.header h1 span { color: var(--accent); }
+.badge {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--green-soft);
+  color: var(--green);
+}
+.badge.offline { background: var(--red-soft); color: var(--red); }
+.main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+
+.hero {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+.hero h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+.hero p {
+  color: var(--text-muted);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+.stat-card .label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+.stat-card .value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  font-family: var(--mono);
+}
+.stat-card .sub {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 0.25rem;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 768px) {
+  .grid-2 { grid-template-columns: 1fr; }
+  .main { padding: 1rem; }
+  .header { padding: 1rem; }
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+.card h3 {
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.card h3 .icon {
+  width: 28px; height: 28px;
+  background: var(--accent-soft);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.85rem;
+}
+
+.tank {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.tank:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+.tank-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+.tank-name { font-weight: 500; font-size: 0.85rem; }
+.tank-pct {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.tank-bar {
+  height: 8px;
+  background: var(--surface-2);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.tank-bar-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+.tank-details {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  font-family: var(--mono);
+}
+
+.doc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.85rem;
+}
+.doc-row:last-child { border-bottom: none; }
+.doc-ref { font-family: var(--mono); font-weight: 500; }
+.doc-type {
+  font-size: 0.7rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+}
+.doc-type.rec { background: var(--green-soft); color: var(--green); }
+.doc-type.dist { background: var(--accent-soft); color: var(--accent); }
+.doc-type.gauge { background: var(--orange-soft); color: var(--orange); }
+.doc-date { color: var(--text-muted); font-size: 0.8rem; }
+
+.endpoint-list { list-style: none; }
+.endpoint-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.82rem;
+}
+.endpoint-list li:last-child { border-bottom: none; }
+.method {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.35rem;
+  border-radius: 3px;
+  min-width: 36px;
+  text-align: center;
+}
+.method.get { background: var(--green-soft); color: var(--green); }
+.method.post { background: var(--accent-soft); color: var(--accent); }
+.ep-path { font-family: var(--mono); color: var(--text-muted); }
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--border);
+  margin-top: 2rem;
+}
+.footer a { color: var(--accent); text-decoration: none; }
+
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  color: var(--text-muted);
+}
+.spinner {
+  width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-right: 0.5rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="logo">F</div>
+    <h1>WMS <span>Fuel</span> Management</h1>
+  </div>
+  <div id="status-badge" class="badge">Connecting...</div>
+</div>
+
+<div class="main">
+  <div class="hero">
+    <h2>Fuel Inventory Control System</h2>
+    <p>Real-time tank monitoring, reception tracking, distribution management and gauging operations for multi-site fuel depots.</p>
+  </div>
+
+  <div class="stats-row" id="stats-row">
+    <div class="stat-card">
+      <div class="label">Total Stock</div>
+      <div class="value" id="total-stock">—</div>
+      <div class="sub">gallons across all tanks</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Active Tanks</div>
+      <div class="value" id="active-tanks">—</div>
+      <div class="sub">monitored in real time</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">Documents</div>
+      <div class="value" id="total-docs">—</div>
+      <div class="sub">receptions &amp; distributions</div>
+    </div>
+    <div class="stat-card">
+      <div class="label">API Status</div>
+      <div class="value" id="api-status" style="color:var(--green)">—</div>
+      <div class="sub">health check</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3><span class="icon">⛽</span> Tank Levels</h3>
+      <div id="tanks-container">
+        <div class="loading"><div class="spinner"></div> Loading tanks...</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3><span class="icon">📋</span> Recent Operations</h3>
+      <div id="docs-container">
+        <div class="loading"><div class="spinner"></div> Loading documents...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">🔌</span> API Endpoints</h3>
+    <ul class="endpoint-list">
+      <li><span class="method get">GET</span><span class="ep-path">/health</span> System health check</li>
+      <li><span class="method post">POST</span><span class="ep-path">/login</span> Authentication with session token</li>
+      <li><span class="method get">GET</span><span class="ep-path">/products</span> Product &amp; tank inventory</li>
+      <li><span class="method get">GET</span><span class="ep-path">/documents</span> Operation history (paginated)</li>
+      <li><span class="method post">POST</span><span class="ep-path">/documents</span> Create reception / distribution / gauging</li>
+      <li><span class="method get">GET</span><span class="ep-path">/reference/fuel</span> Project reference data</li>
+      <li><span class="method get">GET</span><span class="ep-path">/dashboard</span> Live dashboard with KPIs</li>
+      <li><span class="method get">GET</span><span class="ep-path">/fuel/niveau-cuve/{id}</span> Tank level history (30/90/365 days)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  Built by <a href="https://www.linkedin.com/in/idens-meranvil" target="_blank">Idens Meranvil</a>
+  &middot; FastAPI + SQLite &middot; Deployed on Render
+</div>
+
+<script>
+const API = '';
+let token = null;
+
+async function login() {
+  try {
+    const r = await fetch(API + '/login', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({username: 'DemoFuel', password: 'Carburant2024!'})
+    });
+    if (!r.ok) return null;
+    const d = await r.json();
+    return d.token;
+  } catch { return null; }
+}
+
+async function apiFetch(path) {
+  if (!token) return null;
+  const r = await fetch(API + path, {headers: {'X-User-Token': token}});
+  if (!r.ok) return null;
+  return r.json();
+}
+
+function pctColor(pct) {
+  if (pct > 90) return 'var(--red)';
+  if (pct > 75) return 'var(--orange)';
+  return 'var(--accent)';
+}
+
+function renderTanks(products) {
+  const c = document.getElementById('tanks-container');
+  if (!products || !products.length) { c.innerHTML = '<p style="color:var(--text-muted)">No tanks found</p>'; return; }
+  c.innerHTML = products.map(p => {
+    const cap = p.tank_capacity || 1;
+    const stock = p.current_stock || 0;
+    const pct = Math.min(100, (stock / cap * 100));
+    const avail = Math.max(0, cap - stock);
+    return `<div class="tank">
+      <div class="tank-header">
+        <span class="tank-name">${p.name}</span>
+        <span class="tank-pct" style="color:${pctColor(pct)}">${pct.toFixed(1)}%</span>
+      </div>
+      <div class="tank-bar">
+        <div class="tank-bar-fill" style="width:${pct}%;background:${pctColor(pct)}"></div>
+      </div>
+      <div class="tank-details">
+        <span>${stock.toLocaleString()} gal</span>
+        <span>${avail.toLocaleString()} gal available</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function docTypeLabel(t) {
+  if (t === 'RECEIVING') return ['Reception', 'rec'];
+  if (t === 'DISTRIBUTION') return ['Distribution', 'dist'];
+  if (t === 'GAUGING') return ['Gauging', 'gauge'];
+  return [t, ''];
+}
+
+function renderDocs(docs) {
+  const c = document.getElementById('docs-container');
+  if (!docs || !docs.length) { c.innerHTML = '<p style="color:var(--text-muted)">No documents found</p>'; return; }
+  c.innerHTML = docs.slice(0, 8).map(d => {
+    const [label, cls] = docTypeLabel(d.doc_type);
+    const dt = d.created_at ? d.created_at.slice(0, 10) : '';
+    return `<div class="doc-row">
+      <span class="doc-ref">${d.reference || '—'}</span>
+      <span class="doc-type ${cls}">${label}</span>
+      <span class="doc-date">${dt}</span>
+    </div>`;
+  }).join('');
+}
+
+async function init() {
+  const badge = document.getElementById('status-badge');
+  // Health check
+  try {
+    const h = await fetch(API + '/health');
+    const hd = await h.json();
+    document.getElementById('api-status').textContent = hd.status === 'ok' ? 'Online' : 'Error';
+    badge.textContent = 'Live';
+    badge.className = 'badge';
+  } catch {
+    document.getElementById('api-status').textContent = 'Offline';
+    document.getElementById('api-status').style.color = 'var(--red)';
+    badge.textContent = 'Offline';
+    badge.className = 'badge offline';
+    return;
+  }
+
+  token = await login();
+  if (!token) {
+    document.getElementById('tanks-container').innerHTML = '<p style="color:var(--text-muted)">Auth unavailable</p>';
+    document.getElementById('docs-container').innerHTML = '<p style="color:var(--text-muted)">Auth unavailable</p>';
+    return;
+  }
+
+  const [products, docs] = await Promise.all([
+    apiFetch('/products'),
+    apiFetch('/documents?limit=8')
+  ]);
+
+  // Stats
+  if (products) {
+    const totalStock = products.reduce((s, p) => s + (p.current_stock || 0), 0);
+    document.getElementById('total-stock').textContent = totalStock.toLocaleString();
+    document.getElementById('active-tanks').textContent = products.length;
+    renderTanks(products);
+  }
+
+  if (docs) {
+    const list = docs.documents || docs;
+    document.getElementById('total-docs').textContent = docs.total || list.length;
+    renderDocs(list);
+  }
+}
+
+init();
+</script>
+</body>
+</html>
