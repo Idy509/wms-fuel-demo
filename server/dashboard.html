@@ -8,326 +8,354 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #0b0e14;
-  --surface: #141820;
-  --surface-2: #1b2130;
-  --surface-3: #222940;
-  --border: #2a3148;
-  --text: #e4e8f1;
-  --text-2: #a0a8c0;
-  --text-3: #6b7394;
-  --accent: #4f8efa;
-  --accent-2: #3a6fd8;
-  --accent-soft: rgba(79,142,250,0.10);
-  --green: #34d399;
-  --green-soft: rgba(52,211,153,0.10);
-  --amber: #fbbf24;
-  --amber-soft: rgba(251,191,36,0.10);
-  --red: #f87171;
-  --red-soft: rgba(248,113,113,0.10);
-  --font: 'Inter', system-ui, -apple-system, sans-serif;
-  --mono: 'JetBrains Mono', ui-monospace, monospace;
-  --radius: 10px;
+  --bg: #111318;
+  --card: #1a1d23;
+  --card-2: #20242c;
+  --border: #2a2d35;
+  --text: #f0f0f0;
+  --text-2: #9ca3af;
+  --text-3: #6b7280;
+  --blue: #3b82f6;
+  --green: #22c55e;
+  --amber: #f59e0b;
+  --red: #ef4444;
+  --purple: #6366f1;
+  --font: 'Inter', system-ui, sans-serif;
+  --mono: 'JetBrains Mono', monospace;
 }
-*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: var(--font); line-height: 1.55; min-height: 100vh; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--font); line-height:1.5; }
 
-/* ── NAV ── */
+/* NAV */
 .nav {
-  position: sticky; top: 0; z-index: 10;
-  background: rgba(11,14,20,0.85); backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-  padding: 0 2rem; height: 56px;
-  display: flex; align-items: center; justify-content: space-between;
+  background:var(--card); border-bottom:1px solid var(--border);
+  height:52px; padding:0 24px;
+  display:flex; align-items:center; justify-content:space-between;
+  position:sticky; top:0; z-index:10;
 }
-.nav-brand { display: flex; align-items: center; gap: 10px; }
-.nav-icon {
-  width: 32px; height: 32px; border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), #6c5ce7);
-  display: flex; align-items: center; justify-content: center;
-  font-weight: 800; font-size: 14px; color: #fff;
+.nav-left { display:flex; align-items:center; gap:10px; }
+.nav-logo {
+  width:30px; height:30px; border-radius:8px;
+  background:linear-gradient(135deg,var(--blue),var(--purple));
+  display:flex; align-items:center; justify-content:center;
+  font-weight:800; font-size:13px; color:#fff;
 }
-.nav-title { font-size: 14px; font-weight: 600; letter-spacing: -0.01em; }
-.nav-title span { color: var(--accent); }
-.nav-status {
-  font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
-  display: flex; align-items: center; gap: 6px; color: var(--green);
-}
-.nav-status .dot {
-  width: 7px; height: 7px; border-radius: 50%; background: var(--green);
-  animation: pulse 2s ease-in-out infinite;
-}
-.nav-status.offline { color: var(--red); }
-.nav-status.offline .dot { background: var(--red); animation: none; }
-@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+.nav h1 { font-size:14px; font-weight:600; }
+.nav h1 span { color:var(--blue); }
+.status { font-size:11px; font-weight:600; display:flex; align-items:center; gap:6px; color:var(--green); }
+.status .dot { width:6px; height:6px; border-radius:50%; background:currentColor; animation:pulse 2s infinite; }
+.status.off { color:var(--red); }
+.status.off .dot { animation:none; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
 
-/* ── LAYOUT ── */
-.page { max-width: 1180px; margin: 0 auto; padding: 28px 24px 60px; }
-@media (max-width: 768px) { .page { padding: 20px 16px 48px; } .nav { padding: 0 16px; } }
+.page { max-width:1200px; margin:0 auto; padding:24px 24px 48px; }
+@media(max-width:768px){ .page{padding:16px 12px 40px;} .nav{padding:0 12px;} }
 
-/* ── HERO ── */
-.hero { margin-bottom: 32px; }
-.hero h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; line-height: 1.2; }
-.hero p { color: var(--text-2); margin-top: 6px; font-size: 14px; max-width: 560px; }
+/* HERO */
+.hero { margin-bottom:20px; }
+.hero h2 { font-size:22px; font-weight:800; letter-spacing:-.02em; }
+.hero p { color:var(--text-2); font-size:13px; margin-top:4px; }
 
-/* ── KPI ROW ── */
-.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 24px; }
-@media (max-width: 640px) { .kpi-row { grid-template-columns: repeat(2, 1fr); } }
+/* KPI */
+.kpi-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:16px; }
+@media(max-width:640px){ .kpi-grid{grid-template-columns:repeat(2,1fr);} }
 .kpi {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 16px 18px; position: relative; overflow: hidden;
+  background:var(--card); border:1px solid var(--border); border-radius:10px;
+  padding:14px 16px; border-top:2px solid transparent;
 }
-.kpi::before {
-  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
-}
-.kpi.blue::before  { background: var(--accent); }
-.kpi.green::before { background: var(--green); }
-.kpi.amber::before { background: var(--amber); }
-.kpi.red::before   { background: var(--red); }
-.kpi-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-3); }
-.kpi-value { font-family: var(--mono); font-size: 28px; font-weight: 700; margin-top: 4px; letter-spacing: -0.02em; }
-.kpi-sub { font-size: 12px; color: var(--text-3); margin-top: 2px; }
+.kpi.b { border-top-color:var(--blue); }
+.kpi.g { border-top-color:var(--green); }
+.kpi.a { border-top-color:var(--amber); }
+.kpi.r { border-top-color:var(--red); }
+.kpi.p { border-top-color:var(--purple); }
+.kpi-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.06em; color:var(--text-3); }
+.kpi-val { font-family:var(--mono); font-size:26px; font-weight:700; margin-top:2px; }
+.kpi-sub { font-size:11px; color:var(--text-3); }
 
-/* ── GRID ── */
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
-@media (max-width: 768px) { .grid { grid-template-columns: 1fr; } }
+/* SECTION */
+.section {
+  background:var(--card); border:1px solid var(--border); border-radius:10px;
+  padding:16px 18px; margin-bottom:14px;
+}
+.section-head {
+  display:flex; align-items:center; justify-content:space-between;
+  margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border);
+}
+.section-title { font-size:13px; font-weight:700; display:flex; align-items:center; gap:8px; }
+.section-badge { font-size:10px; font-weight:600; padding:2px 8px; border-radius:4px; background:rgba(59,130,246,.1); color:var(--blue); }
 
-/* ── CARD ── */
-.card {
-  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
-  padding: 20px;
-}
-.card-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border);
-}
-.card-title { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-2); }
-.card-badge {
-  font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
-  background: var(--accent-soft); color: var(--accent);
-}
+/* TANK GAUGES */
+.tanks-row { display:flex; flex-wrap:wrap; gap:16px; justify-content:center; }
+.tank-gauge { text-align:center; width:110px; }
+.tank-gauge svg { display:block; margin:0 auto; }
+.tank-label { font-size:11px; font-weight:600; margin-top:6px; }
+.tank-site { font-size:10px; color:var(--text-3); }
+.tank-val { font-family:var(--mono); font-size:11px; font-weight:600; margin-top:2px; }
+.tank-avail { font-size:10px; color:var(--text-3); }
 
-/* ── TANKS ── */
-.tank { margin-bottom: 16px; }
-.tank:last-child { margin-bottom: 0; }
-.tank-top { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px; }
-.tank-name { font-size: 13px; font-weight: 500; }
-.tank-site { font-size: 11px; color: var(--text-3); margin-left: 6px; }
-.tank-pct { font-family: var(--mono); font-size: 13px; font-weight: 600; }
-.tank-track { height: 6px; background: var(--surface-3); border-radius: 3px; overflow: hidden; }
-.tank-fill { height: 100%; border-radius: 3px; transition: width 1s cubic-bezier(.4,0,.2,1); }
-.tank-meta {
-  display: flex; justify-content: space-between; margin-top: 4px;
-  font-size: 11px; color: var(--text-3); font-family: var(--mono);
-}
+/* GRID */
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:14px; }
+@media(max-width:768px){ .grid-2{grid-template-columns:1fr;} }
 
-/* ── DOCS TABLE ── */
-.doc-table { width: 100%; }
-.doc-row {
-  display: grid; grid-template-columns: 100px 1fr 90px 90px;
-  align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border);
-  font-size: 13px; gap: 8px;
-}
-.doc-row:last-child { border-bottom: none; }
-.doc-ref { font-family: var(--mono); font-weight: 500; font-size: 12px; }
-.doc-party { color: var(--text-2); font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.doc-badge {
-  font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.04em;
-  padding: 2px 6px; border-radius: 3px; text-align: center; width: fit-content;
-}
-.doc-badge.rec { background: var(--green-soft); color: var(--green); }
-.doc-badge.del { background: var(--accent-soft); color: var(--accent); }
-.doc-date { font-size: 12px; color: var(--text-3); text-align: right; font-family: var(--mono); }
-@media (max-width: 640px) {
-  .doc-row { grid-template-columns: 80px 1fr 70px; }
-  .doc-date { display: none; }
-}
+/* BAR CHART */
+.bar-chart { display:flex; flex-direction:column; gap:8px; }
+.bar-item { display:flex; align-items:center; gap:10px; }
+.bar-name { font-size:12px; width:110px; flex-shrink:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; color:var(--text-2); }
+.bar-track { flex:1; height:20px; background:var(--card-2); border-radius:4px; overflow:hidden; position:relative; }
+.bar-fill { height:100%; border-radius:4px; transition:width .8s cubic-bezier(.4,0,.2,1); min-width:2px; }
+.bar-val { font-family:var(--mono); font-size:11px; font-weight:500; color:var(--text-2); width:70px; text-align:right; flex-shrink:0; }
 
-/* ── API ── */
-.api-list { display: grid; gap: 6px; }
-.api-item {
-  display: flex; align-items: center; gap: 10px;
-  padding: 6px 0; font-size: 13px;
+/* TX TABLE */
+.tx-table { width:100%; }
+.tx-row {
+  display:grid; grid-template-columns:90px 1fr 80px 80px 80px;
+  align-items:center; padding:7px 0; border-bottom:1px solid var(--border);
+  font-size:12px; gap:6px;
 }
-.api-method {
-  font-family: var(--mono); font-size: 10px; font-weight: 700;
-  padding: 2px 6px; border-radius: 3px; min-width: 36px; text-align: center;
-}
-.api-method.get { background: var(--green-soft); color: var(--green); }
-.api-method.post { background: var(--accent-soft); color: var(--accent); }
-.api-path { font-family: var(--mono); color: var(--text-3); font-size: 12px; }
-.api-desc { color: var(--text-2); font-size: 12px; }
+.tx-row:last-child { border-bottom:none; }
+.tx-ref { font-family:var(--mono); font-weight:500; font-size:11px; }
+.tx-info { color:var(--text-2); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.tx-badge { font-size:9px; font-weight:700; text-transform:uppercase; padding:2px 6px; border-radius:3px; width:fit-content; }
+.tx-badge.rec { background:rgba(34,197,94,.12); color:var(--green); }
+.tx-badge.del { background:rgba(59,130,246,.12); color:var(--blue); }
+.tx-qty { font-family:var(--mono); font-size:11px; text-align:right; color:var(--text-2); }
+.tx-date { font-family:var(--mono); font-size:11px; color:var(--text-3); text-align:right; }
+@media(max-width:640px){ .tx-row{grid-template-columns:80px 1fr 60px 60px;} .tx-date{display:none;} }
 
-/* ── FOOTER ── */
-.footer {
-  text-align: center; padding-top: 32px; margin-top: 12px;
-  border-top: 1px solid var(--border);
-  font-size: 12px; color: var(--text-3);
-}
-.footer a { color: var(--accent); text-decoration: none; }
-.footer a:hover { text-decoration: underline; }
-.footer .tech { margin-top: 4px; font-size: 11px; }
+/* API */
+.api-grid { display:grid; gap:4px; }
+.api-row { display:flex; align-items:center; gap:10px; font-size:12px; padding:5px 0; }
+.api-m { font-family:var(--mono); font-size:9px; font-weight:700; padding:2px 5px; border-radius:3px; min-width:32px; text-align:center; }
+.api-m.get { background:rgba(34,197,94,.12); color:var(--green); }
+.api-m.post { background:rgba(59,130,246,.12); color:var(--blue); }
+.api-p { font-family:var(--mono); color:var(--text-3); font-size:11px; }
 
-/* ── LOADING ── */
-.loading { display: flex; align-items: center; justify-content: center; padding: 32px; color: var(--text-3); font-size: 13px; }
-.spinner { width: 16px; height: 16px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.7s linear infinite; margin-right: 8px; }
-@keyframes spin { to { transform: rotate(360deg); } }
+/* FOOTER */
+.footer { text-align:center; padding:24px 0 0; margin-top:8px; border-top:1px solid var(--border); font-size:12px; color:var(--text-3); }
+.footer a { color:var(--blue); text-decoration:none; }
+.footer .sub { font-size:11px; margin-top:3px; }
+
+.loading { display:flex; align-items:center; justify-content:center; padding:24px; color:var(--text-3); font-size:12px; }
+.spinner { width:14px; height:14px; border:2px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin .6s linear infinite; margin-right:8px; }
+@keyframes spin { to{transform:rotate(360deg)} }
 </style>
 </head>
 <body>
 
 <nav class="nav">
-  <div class="nav-brand">
-    <div class="nav-icon">F</div>
-    <div class="nav-title">WMS <span>Fuel</span></div>
+  <div class="nav-left">
+    <div class="nav-logo">F</div>
+    <h1>WMS <span>Fuel</span> Management</h1>
   </div>
-  <div id="status" class="nav-status"><div class="dot"></div> Connecting</div>
+  <div id="status" class="status"><div class="dot"></div><span>Connecting</span></div>
 </nav>
 
 <div class="page">
   <div class="hero">
-    <h1>Fuel Inventory Control</h1>
-    <p>Multi-site tank monitoring, reception tracking, distribution management and gauging operations for fuel depots.</p>
+    <h2>Fuel Inventory Control System</h2>
+    <p>Real-time tank monitoring, reception tracking, distribution management and gauging for multi-site fuel depots.</p>
   </div>
 
-  <div class="kpi-row">
-    <div class="kpi blue">
-      <div class="kpi-label">Total Stock</div>
-      <div class="kpi-value" id="k-stock">—</div>
-      <div class="kpi-sub">gallons across all tanks</div>
+  <!-- KPI ROW 1 -->
+  <div class="kpi-grid">
+    <div class="kpi b"><div class="kpi-label">Total Stock</div><div class="kpi-val" id="k-stock">—</div><div class="kpi-sub">gallons across all tanks</div></div>
+    <div class="kpi p"><div class="kpi-label">Daily Activity</div><div class="kpi-val" id="k-docs">—</div><div class="kpi-sub">total operations</div></div>
+    <div class="kpi g"><div class="kpi-label">Received (30d)</div><div class="kpi-val" id="k-rec">—</div><div class="kpi-sub">fuel intake ops</div></div>
+    <div class="kpi a"><div class="kpi-label">Delivered (30d)</div><div class="kpi-val" id="k-del">—</div><div class="kpi-sub">fuel dispatched</div></div>
+  </div>
+
+  <!-- TANK GAUGES -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-title">⛽ Tank Levels</span>
+      <span class="section-badge" id="tank-badge">—</span>
     </div>
-    <div class="kpi green">
-      <div class="kpi-label">Receptions</div>
-      <div class="kpi-value" id="k-rec">—</div>
-      <div class="kpi-sub">fuel intake operations</div>
+    <div id="tanks" class="tanks-row"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="grid-2">
+    <div class="section">
+      <div class="section-head"><span class="section-title">Distribution by Receiver</span></div>
+      <div id="chart-receiver" class="bar-chart"><div class="loading"><div class="spinner"></div>Loading…</div></div>
     </div>
-    <div class="kpi amber">
-      <div class="kpi-label">Distributions</div>
-      <div class="kpi-value" id="k-del">—</div>
-      <div class="kpi-sub">fuel dispatched</div>
+    <div class="section">
+      <div class="section-head"><span class="section-title">By Project</span></div>
+      <div id="chart-project" class="bar-chart"><div class="loading"><div class="spinner"></div>Loading…</div></div>
     </div>
-    <div class="kpi red">
-      <div class="kpi-label">Active Tanks</div>
-      <div class="kpi-value" id="k-tanks">—</div>
-      <div class="kpi-sub">monitored sites</div>
+  </div>
+  <div class="grid-2">
+    <div class="section">
+      <div class="section-head"><span class="section-title">Top Vehicles</span></div>
+      <div id="chart-vehicle" class="bar-chart"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+    </div>
+    <div class="section">
+      <div class="section-head"><span class="section-title">By Site</span></div>
+      <div id="chart-site" class="bar-chart"><div class="loading"><div class="spinner"></div>Loading…</div></div>
     </div>
   </div>
 
-  <div class="grid">
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Tank Levels</span>
-        <span class="card-badge" id="tank-count">—</span>
-      </div>
-      <div id="tanks"><div class="loading"><div class="spinner"></div>Loading…</div></div>
+  <!-- RECENT TX -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-title">🕘 Recent Transactions</span>
+      <span class="section-badge" id="tx-badge">—</span>
     </div>
-    <div class="card">
-      <div class="card-header">
-        <span class="card-title">Recent Operations</span>
-        <span class="card-badge" id="doc-total">—</span>
-      </div>
-      <div id="docs"><div class="loading"><div class="spinner"></div>Loading…</div></div>
-    </div>
+    <div id="tx-list"><div class="loading"><div class="spinner"></div>Loading…</div></div>
   </div>
 
-  <div class="card">
-    <div class="card-header">
-      <span class="card-title">REST API Endpoints</span>
-      <span class="card-badge">FastAPI</span>
+  <!-- API -->
+  <div class="section">
+    <div class="section-head">
+      <span class="section-title">🔌 REST API</span>
+      <span class="section-badge">FastAPI</span>
     </div>
-    <div class="api-list">
-      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/health</span><span class="api-desc">System health check</span></div>
-      <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/login</span><span class="api-desc">Authenticate &amp; get session token</span></div>
-      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/products</span><span class="api-desc">Product &amp; tank inventory</span></div>
-      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/documents</span><span class="api-desc">Operation history (paginated)</span></div>
-      <div class="api-item"><span class="api-method post">POST</span><span class="api-path">/documents</span><span class="api-desc">Create reception / distribution / gauging</span></div>
-      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/dashboard</span><span class="api-desc">Live KPIs &amp; analytics</span></div>
-      <div class="api-item"><span class="api-method get">GET</span><span class="api-path">/fuel/niveau-cuve/{id}</span><span class="api-desc">Tank level history (30/90/365 days)</span></div>
+    <div class="api-grid">
+      <div class="api-row"><span class="api-m get">GET</span><span class="api-p">/health</span><span>Health check</span></div>
+      <div class="api-row"><span class="api-m post">POST</span><span class="api-p">/login</span><span>Authenticate &amp; get token</span></div>
+      <div class="api-row"><span class="api-m get">GET</span><span class="api-p">/products</span><span>Tank &amp; product inventory</span></div>
+      <div class="api-row"><span class="api-m get">GET</span><span class="api-p">/documents</span><span>Operation history (paginated)</span></div>
+      <div class="api-row"><span class="api-m post">POST</span><span class="api-p">/documents</span><span>Create reception / distribution / gauging</span></div>
+      <div class="api-row"><span class="api-m get">GET</span><span class="api-p">/dashboard</span><span>Live KPIs, analytics &amp; alerts</span></div>
+      <div class="api-row"><span class="api-m get">GET</span><span class="api-p">/fuel/niveau-cuve/{id}</span><span>Tank level history (30/90/365 days)</span></div>
     </div>
   </div>
 
   <div class="footer">
     Built by <a href="https://www.linkedin.com/in/idens-meranvil" target="_blank">Idens Meranvil</a>
-    <div class="tech">Python · FastAPI · SQLite · Deployed on Render</div>
+    <div class="sub">Python · FastAPI · SQLite · Deployed on Render</div>
   </div>
 </div>
 
 <script>
-const $ = id => document.getElementById(id);
+const $=id=>document.getElementById(id);
 
-function tankColor(pct) {
-  if (pct > 85) return 'var(--red)';
-  if (pct > 70) return 'var(--amber)';
-  return 'var(--accent)';
+/* ── SVG Tank Gauge ── */
+function tankSVG(pct, w=80, h=120) {
+  pct = Math.max(0, Math.min(100, pct));
+  const r = pct / 100;
+  let col, colLight;
+  if (r < 0.15) { col='#ef4444'; colLight='#fca5a5'; }
+  else if (r < 0.40) { col='#f59e0b'; colLight='#fcd34d'; }
+  else { col='#22c55e'; colLight='#86efac'; }
+
+  const x0=10, x1=w-10, yTop=12, yBot=h-16, ry=7;
+  const yLevel = yBot - (yBot - yTop) * r;
+  const ry2 = ry * 0.5;
+
+  let svg = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg">`;
+  // shadow
+  svg += `<ellipse cx="${w/2}" cy="${yBot+ry+2}" rx="${(x1-x0)/2-4}" ry="4" fill="#000" opacity=".3"/>`;
+  // body empty
+  svg += `<ellipse cx="${w/2}" cy="${yBot}" rx="${(x1-x0)/2}" ry="${ry}" fill="#20242c"/>`;
+  svg += `<rect x="${x0}" y="${yTop}" width="${x1-x0}" height="${yBot-yTop}" fill="#20242c"/>`;
+  svg += `<ellipse cx="${w/2}" cy="${yTop}" rx="${(x1-x0)/2}" ry="${ry}" fill="#2a2f38"/>`;
+  // liquid
+  if (r > 0.003) {
+    svg += `<ellipse cx="${w/2}" cy="${yBot}" rx="${(x1-x0)/2}" ry="${ry}" fill="${col}"/>`;
+    if (yLevel < yBot) svg += `<rect x="${x0}" y="${yLevel}" width="${x1-x0}" height="${yBot-yLevel}" fill="${col}"/>`;
+    svg += `<ellipse cx="${w/2}" cy="${yLevel}" rx="${(x1-x0)/2}" ry="${ry2}" fill="${colLight}" opacity=".6"/>`;
+  }
+  // outline
+  svg += `<line x1="${x0}" y1="${yTop}" x2="${x0}" y2="${yBot}" stroke="#3a3d45" stroke-width="1"/>`;
+  svg += `<line x1="${x1}" y1="${yTop}" x2="${x1}" y2="${yBot}" stroke="#3a3d45" stroke-width="1"/>`;
+  svg += `<ellipse cx="${w/2}" cy="${yTop}" rx="${(x1-x0)/2}" ry="${ry}" fill="none" stroke="#3a3d45" stroke-width="1"/>`;
+  svg += `<ellipse cx="${w/2}" cy="${yBot}" rx="${(x1-x0)/2}" ry="${ry}" fill="none" stroke="#3a3d45" stroke-width="1"/>`;
+  // pct label
+  svg += `<text x="${w/2}" y="${(yTop+yBot)/2+4}" text-anchor="middle" fill="#fff" font-family="'JetBrains Mono',monospace" font-size="12" font-weight="700">${pct.toFixed(0)}%</text>`;
+  svg += `</svg>`;
+  return svg;
 }
 
 function renderTanks(products) {
   const el = $('tanks');
-  if (!products.length) { el.innerHTML = '<p style="color:var(--text-3)">No tanks</p>'; return; }
-  $('tank-count').textContent = products.length + ' tanks';
+  $('tank-badge').textContent = products.length + ' tanks';
+  if (!products.length) { el.innerHTML='<span style="color:var(--text-3)">No tanks</span>'; return; }
   el.innerHTML = products.map(p => {
-    const cap = p.tank_capacity || 1;
-    const stk = p.current_stock || 0;
-    const pct = Math.min(100, stk / cap * 100);
-    const avail = Math.max(0, cap - stk);
-    const color = tankColor(pct);
-    const site = p.site ? `<span class="tank-site">${p.site}</span>` : '';
-    return `<div class="tank">
-      <div class="tank-top">
-        <span><span class="tank-name">${p.name.split(' — ')[0]}</span>${site}</span>
-        <span class="tank-pct" style="color:${color}">${pct.toFixed(1)}%</span>
-      </div>
-      <div class="tank-track"><div class="tank-fill" style="width:${pct}%;background:${color}"></div></div>
-      <div class="tank-meta"><span>${stk.toLocaleString()} gal</span><span>${avail.toLocaleString()} gal avail</span></div>
+    const cap = p.tank_capacity||1, stk = p.current_stock||0;
+    const pct = Math.min(100, stk/cap*100);
+    const avail = Math.max(0, cap-stk);
+    const label = p.name.includes('—') ? p.name.split('—')[0].trim() : p.name;
+    return `<div class="tank-gauge">
+      ${tankSVG(pct)}
+      <div class="tank-label">${label}</div>
+      <div class="tank-site">${p.site||''}</div>
+      <div class="tank-val">${stk.toLocaleString()} gal</div>
+      <div class="tank-avail">${avail.toLocaleString()} avail</div>
     </div>`;
   }).join('');
 }
 
-function renderDocs(docs, total) {
-  const el = $('docs');
-  $('doc-total').textContent = total + ' total';
-  if (!docs.length) { el.innerHTML = '<p style="color:var(--text-3)">No operations</p>'; return; }
-  el.innerHTML = '<div class="doc-table">' + docs.map(d => {
+/* ── Bar Chart ── */
+const COLORS = ['#3b82f6','#6366f1','#22c55e','#f59e0b','#ef4444','#ec4899','#14b8a6'];
+function renderBar(id, data, color) {
+  const el = $(id);
+  if (!data||!data.length) { el.innerHTML='<span style="color:var(--text-3)">No data</span>'; return; }
+  const max = Math.max(...data.map(d=>d.total));
+  el.innerHTML = data.map((d,i) => {
+    const w = max > 0 ? (d.total/max*100) : 0;
+    const c = color || COLORS[i % COLORS.length];
+    return `<div class="bar-item">
+      <span class="bar-name">${d.name}</span>
+      <div class="bar-track"><div class="bar-fill" style="width:${w}%;background:${c}"></div></div>
+      <span class="bar-val">${d.total.toLocaleString()} gal</span>
+    </div>`;
+  }).join('');
+}
+
+/* ── Transactions ── */
+function renderTx(docs, total) {
+  const el = $('tx-list');
+  $('tx-badge').textContent = total + ' total';
+  if (!docs.length) { el.innerHTML='<span style="color:var(--text-3)">No transactions</span>'; return; }
+  el.innerHTML = '<div class="tx-table">' + docs.map(d => {
     const isRec = d.type === 'RECEIVING';
-    const badge = isRec ? '<span class="doc-badge rec">REC</span>' : '<span class="doc-badge del">DEL</span>';
-    const dt = d.created_at ? d.created_at.slice(0, 10) : '';
-    const party = d.party || (isRec ? 'Fuel intake' : '—');
-    return `<div class="doc-row">
-      <span class="doc-ref">${d.reference || '—'}</span>
-      <span class="doc-party">${party}</span>
+    const badge = isRec ? '<span class="tx-badge rec">REC</span>' : '<span class="tx-badge del">DEL</span>';
+    const info = d.party || d.product_name || '—';
+    const qty = d.quantity ? d.quantity.toLocaleString()+' gal' : '';
+    const dt = d.created_at ? d.created_at.slice(0,10) : '';
+    return `<div class="tx-row">
+      <span class="tx-ref">${d.reference||'—'}</span>
+      <span class="tx-info">${info}</span>
       ${badge}
-      <span class="doc-date">${dt}</span>
+      <span class="tx-qty">${qty}</span>
+      <span class="tx-date">${dt}</span>
     </div>`;
   }).join('') + '</div>';
 }
 
+/* ── Init ── */
 async function init() {
   const st = $('status');
   try {
     const h = await fetch('/health');
     if (!h.ok) throw 0;
-    st.innerHTML = '<div class="dot"></div> Live';
-    st.className = 'nav-status';
+    st.innerHTML = '<div class="dot"></div><span>Live</span>';
+    st.className = 'status';
   } catch {
-    st.innerHTML = '<div class="dot"></div> Offline';
-    st.className = 'nav-status offline';
+    st.innerHTML = '<div class="dot"></div><span>Offline</span>';
+    st.className = 'status off';
     return;
   }
   try {
     const r = await fetch('/demo/summary');
     if (!r.ok) throw 0;
     const d = await r.json();
-    const products = d.products || [];
-    const totalStock = products.reduce((s,p) => s + (p.current_stock||0), 0);
+    const products = d.products||[];
+    const totalStock = products.reduce((s,p)=>s+(p.current_stock||0),0);
     $('k-stock').textContent = totalStock.toLocaleString();
-    $('k-rec').textContent = d.receptions || 0;
-    $('k-del').textContent = d.deliveries || 0;
-    $('k-tanks').textContent = products.length;
+    $('k-docs').textContent = d.total_documents||0;
+    $('k-rec').textContent = d.receptions||0;
+    $('k-del').textContent = d.deliveries||0;
     renderTanks(products);
-    renderDocs(d.recent_documents || [], d.total_documents || 0);
-  } catch {
-    $('tanks').innerHTML = '<p style="color:var(--text-3)">Data unavailable</p>';
-    $('docs').innerHTML = '<p style="color:var(--text-3)">Data unavailable</p>';
+    renderBar('chart-receiver', d.by_receiver);
+    renderBar('chart-project', d.by_project);
+    renderBar('chart-vehicle', d.by_vehicle);
+    renderBar('chart-site', d.by_site);
+    renderTx(d.recent_documents||[], d.total_documents||0);
+  } catch(e) {
+    console.error(e);
+    $('tanks').innerHTML='<span style="color:var(--text-3)">Data unavailable</span>';
   }
 }
 init();

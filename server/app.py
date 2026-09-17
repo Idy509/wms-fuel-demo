@@ -705,8 +705,40 @@ def demo_summary():
             "SELECT count(*) FROM documents WHERE type='DELIVERY'"
         ).fetchone()[0]
         docs = [dict(r) for r in conn.execute(
-            "SELECT reference, type, party, created_at FROM documents "
-            "ORDER BY created_at DESC LIMIT 10"
+            "SELECT d.reference, d.type, d.party, d.created_at, "
+            "d.vehicle_plate, d.project, p.name AS product_name, dl.quantity "
+            "FROM documents d "
+            "LEFT JOIN document_lines dl ON dl.document_id = d.id "
+            "LEFT JOIN products p ON p.id = dl.product_id "
+            "ORDER BY d.created_at DESC LIMIT 12"
+        ).fetchall()]
+        by_receiver = [dict(r) for r in conn.execute(
+            "SELECT d.party AS name, count(*) AS ops, "
+            "round(sum(dl.quantity),1) AS total "
+            "FROM documents d JOIN document_lines dl ON dl.document_id=d.id "
+            "WHERE d.type='DELIVERY' AND d.party IS NOT NULL "
+            "GROUP BY d.party ORDER BY total DESC"
+        ).fetchall()]
+        by_project = [dict(r) for r in conn.execute(
+            "SELECT d.project AS name, count(*) AS ops, "
+            "round(sum(dl.quantity),1) AS total "
+            "FROM documents d JOIN document_lines dl ON dl.document_id=d.id "
+            "WHERE d.type='DELIVERY' AND d.project IS NOT NULL "
+            "GROUP BY d.project ORDER BY total DESC"
+        ).fetchall()]
+        by_vehicle = [dict(r) for r in conn.execute(
+            "SELECT d.vehicle_plate AS name, count(*) AS ops, "
+            "round(sum(dl.quantity),1) AS total "
+            "FROM documents d JOIN document_lines dl ON dl.document_id=d.id "
+            "WHERE d.type='DELIVERY' AND d.vehicle_plate IS NOT NULL "
+            "GROUP BY d.vehicle_plate ORDER BY total DESC"
+        ).fetchall()]
+        by_site = [dict(r) for r in conn.execute(
+            "SELECT p.site AS name, round(sum(dl.quantity),1) AS total "
+            "FROM documents d JOIN document_lines dl ON dl.document_id=d.id "
+            "JOIN products p ON p.id=dl.product_id "
+            "WHERE d.type='DELIVERY' "
+            "GROUP BY p.site ORDER BY total DESC"
         ).fetchall()]
     return {
         "products": products,
@@ -714,6 +746,10 @@ def demo_summary():
         "receptions": rec_count,
         "deliveries": del_count,
         "recent_documents": docs,
+        "by_receiver": by_receiver,
+        "by_project": by_project,
+        "by_vehicle": by_vehicle,
+        "by_site": by_site,
     }
 
 
