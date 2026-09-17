@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: wms-fuel-demo
+    runtime: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn server.app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: WMS_DB_PATH
+        value: data/demo_fuel/demo_fuel.db
+      - key: WMS_DEMO_MODE
+        value: "1"
+      - key: PYTHON_VERSION
+        value: "3.12"

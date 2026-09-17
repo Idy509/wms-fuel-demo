@@ -1,0 +1,8 @@
+{
+  "server_host": "127.0.0.1",
+  "server_port": 8001,
+  "proposer_impression": false,
+  "language": "ht",
+  "timeout_connexion": 10.0,
+  "timeout_lecture": 60.0
+}

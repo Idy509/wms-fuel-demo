@@ -1,0 +1,10 @@
+customtkinter>=5.2
+fpdf2>=2.8
+openpyxl>=3.1
+# Miniatures des photos (fiche produit, pièces jointes d'un bon). Installé de
+# fait par CustomTkinter mais PAS déclaré par lui : sans cette ligne, une
+# installation propre perd l'affichage des photos sans le dire.
+pillow>=10
+requests>=2.32
+tkcalendar>=1.6
+websocket-client>=1.8.0
